@@ -1,23 +1,29 @@
-#' function definitions ##### Add perturbations, sgRNA_num and
-#' percent.mt of each cells to the Seurat object.
-#' For other downstream function of SCREEN, this step is always needed
+#' Add Meta Data Information onto a SeuratObject
+#'
+#' Add sgRNA information, mitochondrial gene percentage and replicate information onto a SeuratObject.
+#'
+#' @param sg_lib Data frame or directory to a txt file containing 3 columns: cell, barcode, gene. If sgRNA information stored in a matrix-like format or input data frame only has sgRNA frequency of each cell, use \code{\link[SCREE]{sgRNAassign}} to assign sgRNA to each cell.
+#' @param mtx SeuratObject or directory to rds file of SeuratObject, with cell in columns and features in rows.
+#' @param cal.mt Logical, calculate mitochondrial gene percentage or not. Default is \code{TRUE}.
+#' @param species Only support "Hs" and "Mm", if input other species, \code{percent.mt} will be count as "Mm". Default is "Hs".
+#' @param replicate Directory of a txt file or a vector only containg the replicate information of each cell, in the same order of cells in SeuratObject. If no replicate information, we will consider that all cells are from the same replicate, and this parameter will be set as 1. Default is 1.
+#' 
+#' @import plyr
+#' @import Seurat
 #' @export
 
-Add_meta_data <- function(sg_dir, mtx_dir, cal.mt = TRUE, species = "Hs", replicate = 1){
+Add_meta_data <- function(sg_lib, mtx, cal.mt = TRUE, species = "Hs", replicate = 1){
     
     #read files
     
-    if (is.character(mtx_dir)) {
-        message(paste("Reading RDS file:", mtx_dir))
-        mtx <- readRDS(mtx_dir)
-    } else {
-        mtx <- mtx_dir
+    if (is.character(mtx)) {
+        message(paste("Reading RDS file:", mtx))
+        mtx <- readRDS(mtx)
     }
-    if (is.character(sg_dir)) {
-        message(paste("Reading sgRNA lib file:", sg_dir))
-        sg_lib <- read.table(sg_dir, header = T)
-    } else {
-        sg_lib <- sg_dir
+    
+    if (is.character(sg_lib)) {
+        message(paste("Reading sgRNA lib file:", sg_lib))
+        sg_lib <- read.table(sg_lib, header = T)
     }
 
     #remove cells in sgRNA library that are not included in matrix

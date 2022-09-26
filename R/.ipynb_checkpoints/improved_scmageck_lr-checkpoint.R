@@ -1,9 +1,21 @@
-#' function definitions ##### Improved scMAGeCK_LR, save and return two data.frame:
-#' rownames indicates selected_gene while colnames indicates perturbations.
+#' Modified scMAGeCK Linear Regression
+#'
+#' Use linear regression to test the association of gene knockout with all possible genes. Modified from \code{\link[scMAGeCK]{scmageck_lr}}
+#' 
+#' @param BARCODE Data frame or directory to a txt file containing 3 columns: cell, barcode, gene. If sgRNA information stored in a matrix-like format or sinput data frame only has sgRNA frequence of each cell, use \code{\link[SCREEN]{sgRNAassign}} to assign sgRNA to each cell. 
+#' @param RDS SeuratObject or directory to rds file of SeuratObject, with cell in columns and features in rows. Note that the dataset has to be normalized and scaled. Can also be the data frame of scale data. 
+#' @param NEGCTRL The name of the genes served as negative controls. 
+#' @param SELECT_GENE The list of genes for regression. Default is \code{NULL}, all genes in the table are subject to regression.
+#' @param LABEL The label of the output file. Default is \code{NULL}, and the prefix of file will be "sample1".
+#' @param PERMUTATION The number of permutations for p value calculation. Default is \code{NULL}, and the permutations times will be 10000
+#' @param SAVEPATH The save path of result. Default save path is the current working directory. If you don't need save the result, set SAVEPATH as NULL.
+#' @param LAMBDA A paramter for the LR model for ridge regression. Default: 0.01.
+#' @param NTC_baseline Using negative control as baseline or not. Default is \code{TRUE}.
+#' 
+#' @import SeuratObject
 #' @export
 
-improved_scmageck_lr <- function(BARCODE, RDS, NEGCTRL, SELECT_GENE = NULL, LABEL = NULL,
-                        PERMUTATION = NULL, SAVEPATH = "./", LAMBDA = 0.01, NTC_baseline = TRUE) {
+improved_scmageck_lr <- function(BARCODE, RDS, NEGCTRL = "NTC", SELECT_GENE = NULL, LABEL = NULL, PERMUTATION = NULL, SAVEPATH = ".", LAMBDA = 0.01, NTC_baseline = TRUE) {
     if (!is.null(LABEL)) {
         data_label = LABEL
     } else {

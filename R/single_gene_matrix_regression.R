@@ -25,10 +25,10 @@ single_gene_matrix_regression <- function(targetobj, ngctrlgene = c("NonTargetin
     message(paste("Selected genes:", length(select_genes)))
 
     if (NTC_baseline == TRUE) {
-        if(length(ngctrlgene) == 1){
+        if (length(ngctrlgene) == 1) {
             colnames(indmatrix)[colnames(indmatrix) == ngctrlgene]<- "NegCtrl"
             indmatrix[, "NegCtrl"] <- 1
-        } else if (length(ngctrlgene) > 1){
+        } else if (length(ngctrlgene) > 1) {
             indmatrix <- indmatrix[, -which(colnames(indmatrix) %in% ngctrlgene[-1])] #only remain one columns of NTC
             colnames(indmatrix)[colnames(indmatrix) == ngctrlgene[1]] <- "NegCtrl"
             indmatrix[, "NegCtrl"] <- 1
