@@ -36,7 +36,7 @@ sgRNA_quality_plot <- function(mtx, sg_lib, title.size = 25, legend.text.size = 
         mtx <- readRDS(mtx)
     } 
     
-    if (is.character(sg_dir)) {
+    if (is.character(sg_lib)) {
         message(paste("Reading sgRNA lib file:", sg_lib))
         sg_lib <- read.table(sg_lib, header = T)
     }
