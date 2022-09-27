@@ -132,7 +132,7 @@ CalculatePerturbEnrichment <- function(mtx, sg_lib, NTC = "NTC", NTC.cal = TRUE,
                                  colorRampPalette(colors = c(color[1], color[2]))(length(bk)),
                                  legend_breaks = lg_bk, breaks = bk, show_rownames = T, fontsize = fontsize, 
                                  cellwidth = cellwidth, cellheight = cellheight,
-                                 show_colnames = T, silent = T)
+                                 show_colnames = T, silent = T, angle_col = angle)
     }
     
     if (table.save == TRUE) {

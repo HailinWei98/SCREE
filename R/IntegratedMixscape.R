@@ -98,7 +98,7 @@ IntegratedMixscape<- function(mtx, sg_lib, NTC = "NTC", sg.to.use = "all", sg.sp
 
         # Prepare RNA assay for dimensionality reduction:
 
-        eccite <- umap(mtx = eccite, nfeature = nfeature, selection.method = selection.method, npcs = npcs, dims = dims, assays = assays, algorithm = algorithm, reduction.prefix = reduction.prefix, prefix = prefix, label = label, label.cut = label.cut, resolution = resolution, raster = raster, title.size = title.size, legend.key.size = legend.key.size, legend.text.size = legend.text.size, x.text.size = x.text.size, x.title.size = x.title.size, y.size.size = y.size.size, y.title.size = y.title.size, pt.size = pt.size, plot.show = FALSE, plot.save = TRUE, plot.return = TRUE)
+        eccite <- umap(mtx = eccite, nfeature = nfeature, selection.method = selection.method, npcs = npcs, dims = dims, assays = assays, algorithm = algorithm, reduction.prefix = reduction.prefix, prefix = prefix, label = label, label.cut = label.cut, resolution = resolution, raster = raster, title.size = title.size, legend.key.size = legend.key.size, legend.text.size = legend.text.size, x.text.size = x.text.size, x.title.size = x.title.size, y.text.size = y.text.size, y.title.size = y.title.size, pt.size = pt.size, plot.show = FALSE, plot.save = TRUE, plot.return = TRUE)
         
         p_p <- eccite[[2]]
         p_c <- eccite[[3]]
@@ -108,7 +108,7 @@ IntegratedMixscape<- function(mtx, sg_lib, NTC = "NTC", sg.to.use = "all", sg.sp
         perturb_ratio <- CalculatePerturbEnrichment(mtx = eccite, sg_lib = sg_lib, NTC = NTC, NTC.cal = NTC.cal, prefix = prefix, 
                                                     label = paste(label, "before_", sep = ""), top = top, range = range, 
                                                     color = color, cell = cell, fontsize = fontsize, 
-                                                    angle_col = angle, legend.title = legend.title, 
+                                                    angle = angle, legend.title = legend.title, 
                                                     plot.save = TRUE, table.save = TRUE)
 
         #calculate cell cycle gene
@@ -188,7 +188,7 @@ IntegratedMixscape<- function(mtx, sg_lib, NTC = "NTC", sg.to.use = "all", sg.sp
         VariableFeatures(object = eccite) <- VariableFeatures(object = eccite[[assays]])
         eccite <- ScaleData(object = eccite, do.scale = F, do.center = T)
 
-        eccite <- umap(mtx = eccite, nfeature = nfeature, selection.method = selection.method, npcs = npcs, dims = dims, assays = "PRTB", algorithm = algorithm, reduction.prefix = "prtb", prefix = prefix, label = label, label.cut = label.cut, resolution = resolution, raster = raster, title.size = title.size, legend.key.size = legend.key.size, legend.text.size = legend.text.size, x.text.size = x.text.size, x.title.size = x.title.size, y.size.size = y.size.size, y.title.size = y.title.size, pt.size = pt.size, plot.show = FALSE, plot.save = TRUE, plot.return = TRUE)
+        eccite <- umap(mtx = eccite, nfeature = nfeature, selection.method = selection.method, npcs = npcs, dims = dims, assays = "PRTB", algorithm = algorithm, reduction.prefix = "prtb", prefix = prefix, label = label, label.cut = label.cut, resolution = resolution, raster = raster, title.size = title.size, legend.key.size = legend.key.size, legend.text.size = legend.text.size, x.text.size = x.text.size, x.title.size = x.title.size, y.text.size = y.text.size, y.title.size = y.title.size, pt.size = pt.size, plot.show = FALSE, plot.save = TRUE, plot.return = TRUE)
         
         q_p <- eccite[[2]]
         q_c <- eccite[[3]]
@@ -198,7 +198,7 @@ IntegratedMixscape<- function(mtx, sg_lib, NTC = "NTC", sg.to.use = "all", sg.sp
         perturb_ratio <- CalculatePerturbEnrichment(mtx = eccite, sg_lib = sg_lib, NTC = NTC, NTC.cal = NTC.cal, prefix = prefix, 
                                                     label = paste(label, "after_", sep = ""), top = top, range = range, 
                                                     color = color, cell = cell, fontsize = fontsize, 
-                                                    angle_col = angle, legend.title = legend.title, 
+                                                    angle = angle, legend.title = legend.title, 
                                                     plot.save = TRUE, table.save = TRUE)
         
         # Generate plots to check if clustering is driven by biological replicate ID,

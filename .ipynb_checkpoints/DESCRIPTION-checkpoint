@@ -1,6 +1,6 @@
 Package: SCREE
 Title: What the Package Does (One Line, Title Case)
-Version: 0.9
+Version: 0.91
 Authors@R: 
     person(given = "Hailin",
            family = "Wei",
