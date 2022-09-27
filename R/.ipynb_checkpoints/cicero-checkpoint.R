@@ -7,7 +7,7 @@
 #' @param selected Enhancer regions to visualize. Default is \code{NULL}, all enhancers will be chosen.
 #' @param species Only support "Hs" and "Mm". Default is "Hs".
 #' @param version Version of the reference genome(Ensembl). Default is "v75".
-#' @param gene_annotations Gene annotations stored in data frame format, including c("chromosome", "start", "end", "strand", "transcript") as colnames. Default is \code{NULL}, gene annotations are from \code{\link[ensembldb]}.
+#' @param gene_annotations Gene annotations stored in data frame format, including c("chromosome", "start", "end", "strand", "transcript") as colnames. Default is \code{NULL}, gene annotations are from \code{\link{ensembldb}}.
 #' @param score_cut Score cutoff of \code{improved_scmageck_lr} results. Default is 0.
 #' @param pval_cut P-value cutoff of \code{improved_scmageck_lr} results. Default is 0.05.
 #' @param upstream The number of nucleotides upstream of the start site of selected region. Default is 2000000.
@@ -30,16 +30,18 @@
 #' @param html_config Logical, generate and return a list includes the config character string of html. Default is \code{FALSE}.
 #' 
 #' @import ggplot2
+#' @importFrom utils read.table write.table
+#' @importFrom grDevices colorRampPalette dev.off pdf png
 #' @import Gviz
-#' @import ensembldb
+#' @importFrom ensembldb genes
 #' @import EnsDb.Hsapiens.v75
 #' @import EnsDb.Hsapiens.v79
 #' @import EnsDb.Hsapiens.v86
 #' @import EnsDb.Mmusculus.v75
 #' @import EnsDb.Mmusculus.v79
-#' @import GenomeInfoDb
-#' @import IRanges
+#' @import GenomeInfoDb 
 #' @import ggplotify
+#' @importFrom IRanges IRanges
 #' @export
 
 ciceroPlot <- function(score, pval, selected = NULL, species = "Hs", version = "v75", gene_annotations = NULL, score_cut = 0, pval_cut = 0.05, upstream = 2000000, downstream = 2000000, track_size = c(1, .3, .2, .3), include_axis_track = TRUE, connection_color = "#7F7CAF", connection_color_legend = TRUE, connection_width = 2, connection_ymax = NULL, gene_model_color = "#81D2C7", alpha_by_coaccess = FALSE, gene_model_shape = c("smallArrow", "box"), plot.save = TRUE, prefix = ".", label = "", width = 7, height = 7, png_res = 720, html_config = FALSE){
@@ -91,6 +93,7 @@ ciceroPlot <- function(score, pval, selected = NULL, species = "Hs", version = "
     }
     
     if (plot.save == TRUE) {
+        
         dir <- file.path(prefix, "results")
         if (!(dir.exists(dir))) {
             dir.create(dir)
@@ -593,7 +596,7 @@ get_results <- function(chr, start, end, minbp, maxbp, gene_anno, track_size, ge
                         
                         
 #' Regulatory Potential Plot
-#'        
+#'
 #' Visualize the relationship between potential enhancers and genes, using results from \code{\link[SCREE]{improved_scmageck_lr}}. Modifies from \code{\link[cicero]{plot_connections}}. For scATAC-seq based input, potential enhancers are defined as DA peaks without overlap with promoter regions.
 #'                     
 #' @param mtx SeuratObject or directory to rds file of SeuratObject, with cell in columns and features in rows.
@@ -603,7 +606,7 @@ get_results <- function(chr, start, end, minbp, maxbp, gene_anno, track_size, ge
 #' @param DApeaks Data frame or directory of DA peaks table generated before. Need a additional column of perturbation information, named "TF". Default is \code{NULL}, will find DA peaks for selected perturbations.
 #' @param species Only support "Hs" and "Mm". Default is "Hs".
 #' @param version Version of the reference genome(Ensembl). Default is "v75".
-#' @param gene_annotations Gene annotations stored in data frame format, including c("chromosome", "start", "end", "strand", "transcript") as colnames. Default is \code{NULL}, gene annotations are from \code{\link[ensembldb]}.
+#' @param gene_annotations Gene annotations stored in data frame format, including c("chromosome", "start", "end", "strand", "transcript") as colnames. Default is \code{NULL}, gene annotations are from \code{\link{ensembldb}}.
 #' @param pro_up The number of nucleotides upstream of the transcription start site that should be included in the promoter region. Default is 3000.
 #' @param pro_down The number of nucleotides downstream of the transcription start site that should be included in the promoter region. Default is 0.
 #' @param overlap_cut Maximum overlap nucleotides between peaks and promoters. Default is 0.
@@ -636,14 +639,16 @@ get_results <- function(chr, start, end, minbp, maxbp, gene_anno, track_size, ge
 #' 
 #' @import ggplot2
 #' @import Gviz
-#' @import ensembldb
+#' @importFrom utils read.table write.table
+#' @importFrom grDevices colorRampPalette dev.off pdf png
+#' @importFrom ensembldb genes
 #' @import EnsDb.Hsapiens.v75
 #' @import EnsDb.Hsapiens.v79
 #' @import EnsDb.Hsapiens.v86
 #' @import EnsDb.Mmusculus.v75
 #' @import EnsDb.Mmusculus.v79
 #' @import GenomeInfoDb
-#' @import IRanges
+#' @importFrom IRanges IRanges
 #' @import ggplotify
 #' @export 
     

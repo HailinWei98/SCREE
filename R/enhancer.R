@@ -7,7 +7,7 @@
 #' @param selected Enhancer regions to visualize gene expression. By default, all enhancers will be chosen.
 #' @param species Only support "Hs" and "Mm". Default is "Hs".
 #' @param version Version of the reference genome(Ensembl). Default is "v75".
-#' @param gene_annotations Gene annotations stored in data frame format, including c("chromosome", "start", "end", "strand", "transcript") as colnames. Default is \code{NULL}, gene annotations are from \code{\link[ensembldb]}.
+#' @param gene_annotations Gene annotations stored in data frame format, including c("chromosome", "start", "end", "strand", "transcript") as colnames. Default is \code{NULL}, gene annotations are from \code{\link{ensembldb}}.
 #' @param upstream The number of nucleotides upstream of the start site of selected region. Default is 2000000.
 #' @param downstream The number of nucleotides downstream of the start site of selected region. Default is 2000000.
 #' @param NTC The name of negative controls. Default is "NTC".
@@ -24,7 +24,9 @@
 #' @param png_res The nominal resolution in ppi of png file. Higher png_res indicates a bigger and more clear png file. Default is 720.
 #' @param html_config Logical, generate and return a list includes the config character string of html. Default is \code{FALSE}.
 #'
-#' @import ensembldb
+#' @importFrom utils read.table write.table
+#' @importFrom grDevices colorRampPalette dev.off pdf png
+#' @importFrom ensembldb genes
 #' @import EnsDb.Hsapiens.v75
 #' @import EnsDb.Hsapiens.v79
 #' @import EnsDb.Hsapiens.v86
@@ -32,7 +34,7 @@
 #' @import EnsDb.Mmusculus.v79
 #' @import Seurat
 #' @import ggpubr
-#' @import cowplot
+#' @importFrom cowplot plot_grid
 #' @export
 
 EnhancerGeneExpression <- function(sg_lib, mtx, selected = NULL, species = "Hs", version = "v75", gene_annotations = NULL, upstream = 2000000, downstream = 2000000, NTC = "NTC", title.size = 25, x.text.size = 25, x.title.size = 22, y.text.size = 25, y.title.size = 22, annotate.size = 40, plot.save = TRUE, prefix = ".", width = 18, height = 20, png_res = 720, html_config = FALSE) {
@@ -444,7 +446,7 @@ EnhancerGeneExpression <- function(sg_lib, mtx, selected = NULL, species = "Hs",
 #' @param selected Enhancer regions to calculate direct target ratio. By default, all enhancers will be chosen.
 #' @param species Only support "Hs" and "Mm". Default is "Hs".
 #' @param version Version of the reference genome(Ensembl). Default is "v75".
-#' @param gene_annotations Gene annotations stored in data frame format, including c("chromosome", "start", "end", "strand", "transcript") as colnames. Default is \code{NULL}, gene annotations are from \code{\link[ensembldb]}.
+#' @param gene_annotations Gene annotations stored in data frame format, including c("chromosome", "start", "end", "strand", "transcript") as colnames. Default is \code{NULL}, gene annotations are from \code{\link{ensembldb}}.
 #' @param upstream The number of nucleotides upstream of the start site of selected region. Default is 2000000.
 #' @param downstream The number of nucleotides downstream of the start site of selected region. Default is 2000000.
 #' @param score_cut Score cutoff of \code{improved_scmageck_lr} results. Default is 0.2.
@@ -453,7 +455,8 @@ EnhancerGeneExpression <- function(sg_lib, mtx, selected = NULL, species = "Hs",
 #' @param prefix Path to save the table. Default is current directory.
 #' @param label The prefix label of the output file. Notably, there needs a separator between default file names and the label, so label would be better to be like "label_". Default is "".
 #'
-#' @import ensembldb
+#' @importFrom utils read.table write.table
+#' @importFrom ensembldb genes
 #' @import EnsDb.Hsapiens.v75
 #' @import EnsDb.Hsapiens.v79
 #' @import EnsDb.Hsapiens.v86

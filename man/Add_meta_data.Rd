@@ -2,14 +2,21 @@
 % Please edit documentation in R/Add_meta_data.R
 \name{Add_meta_data}
 \alias{Add_meta_data}
-\title{function definitions ##### Add perturbations, sgRNA_num and
-percent.mt of each cells to the Seurat object.
-For other downstream function of SCREEN, this step is always needed}
+\title{Add Meta Data Information onto a SeuratObject}
 \usage{
-Add_meta_data(sg_dir, mtx_dir, cal.mt = TRUE, species = "Hs", replicate = 1)
+Add_meta_data(sg_lib, mtx, cal.mt = TRUE, species = "Hs", replicate = 1)
+}
+\arguments{
+\item{sg_lib}{Data frame or directory to a txt file containing 3 columns: cell, barcode, gene. If sgRNA information stored in a matrix-like format or input data frame only has sgRNA frequency of each cell, use \code{\link[SCREE]{sgRNAassign}} to assign sgRNA to each cell.}
+
+\item{mtx}{SeuratObject or directory to rds file of SeuratObject, with cell in columns and features in rows.}
+
+\item{cal.mt}{Logical, calculate mitochondrial gene percentage or not. Default is \code{TRUE}.}
+
+\item{species}{Only support "Hs" and "Mm", if input other species, \code{percent.mt} will be count as "Mm". Default is "Hs".}
+
+\item{replicate}{Directory of a txt file or a vector only containg the replicate information of each cell, in the same order of cells in SeuratObject. If no replicate information, we will consider that all cells are from the same replicate, and this parameter will be set as 1. Default is 1.}
 }
 \description{
-function definitions ##### Add perturbations, sgRNA_num and
-percent.mt of each cells to the Seurat object.
-For other downstream function of SCREEN, this step is always needed
+Add sgRNA information, mitochondrial gene percentage and replicate information onto a SeuratObject.
 }

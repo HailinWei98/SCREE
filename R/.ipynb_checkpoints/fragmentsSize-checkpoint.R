@@ -5,9 +5,9 @@
 #' @param mtx SeuratObject or directory to rds file of SeuratObject, with cell in columns and features in rows.
 #' @param fragments Data frame or directory of fragments file.
 #' @param CBCindex Cell barcode index, indicates the column index of cell barcode. Default is 4, in line with a standard fragments file.
-#' @param startIndex
-#' @param endIndex
-#' @param maxSize
+#' @param startIndex Start site index, indicates the column index of fragments start site. Default is 2, in line with a standard fragments file.
+#' @param endIndex End site index, indicates the column index of fragments end site. Default is 3, in line with a standard fragments file.
+#' @param maxSize Maximum size of fragments. Default is 1000.
 #' @param title.size Numeric, title size of the plot. Default is 25.
 #' @param x.text.size Numeric, x-axis text size of the plot. Default is 16.
 #' @param x.title.size Numeric, x-axis title size of the plot. Default is 20.
@@ -20,8 +20,10 @@
 #' @param height Height of the graphics region of the pdf file in inches, for both png and pdf format. Default is 7.
 #' @param png_res The nominal resolution in ppi of png file. Higher png_res indicates a bigger and more clear png file. Default is 720.
 #' 
+#' @importFrom grDevices colorRampPalette dev.off pdf png
+#' @importFrom utils read.table write.table
 #' @import ggplot2
-#' @import plyr
+#' @importFrom plyr count
 #' @export
 
 fragmentsSize <- function(mtx, fragments, CBCindex = 4, startIndex = 2, endIndex = 3, maxSize = 1000, title.size = 25, x.text.size = 16, x.title.size = 20, y.text.size = 16, y.title.size = 20, plot.save = TRUE, prefix = ".", label = "", width = 7, height = 7, png_res = 720){

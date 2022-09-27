@@ -12,6 +12,7 @@
 #' @param LAMBDA A paramter for the LR model for ridge regression. Default: 0.01.
 #' @param NTC_baseline Using negative control as baseline or not. Default is \code{TRUE}.
 #' 
+#' @importFrom utils read.table write.table
 #' @import SeuratObject
 #' @export
 

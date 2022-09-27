@@ -2,10 +2,25 @@
 % Please edit documentation in R/normalize_scale.R
 \name{normalize_scale}
 \alias{normalize_scale}
-\title{function definitions ##### Normalize and scale data.}
+\title{Normalize and Scale Data}
 \usage{
-normalize_scale(mtx_dir)
+normalize_scale(
+  mtx,
+  normalization.method = "LogNormalize",
+  scale.factor = 10000,
+  vars.to.regress = c("nCount_RNA", "percent.mt"),
+  features = NULL
+)
+}
+\arguments{
+\item{mtx}{SeuratObject or directory to rds file of SeuratObject, with cell in columns and features in rows.}
+
+\item{normalization.method}{Method for normalization, can be one of "LogNormalize", "CLR", "RC". See more details from \code{\link[Seurat]{NormalizeData}}. Default is "LogNormalize".}
+
+\item{scale.factor}{Sets the scale factor for cell-level normalization. Default is 10000.}
+
+\item{vars.to.regress}{Variables to regress out (previously latent.vars in RegressOut). Default is c("nCount_RNA", "percent.mt").}
 }
 \description{
-function definitions ##### Normalize and scale data.
+Normalize and scale the raw UMI count matrix based on \code{\link{Seurat}}.
 }

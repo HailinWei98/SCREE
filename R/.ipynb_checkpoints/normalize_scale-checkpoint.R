@@ -1,7 +1,7 @@
 #' Normalize and Scale Data
 #'
-#' Normalize and scale the raw UMI count matrix based on \code{\link[Seurat]}.
-#' 
+#' Normalize and scale the raw UMI count matrix based on \code{\link{Seurat}}.
+#'
 #' @param mtx SeuratObject or directory to rds file of SeuratObject, with cell in columns and features in rows.  
 #' @param normalization.method Method for normalization, can be one of "LogNormalize", "CLR", "RC". See more details from \code{\link[Seurat]{NormalizeData}}. Default is "LogNormalize".
 #' @param scale.factor Sets the scale factor for cell-level normalization. Default is 10000.

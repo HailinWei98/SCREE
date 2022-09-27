@@ -26,11 +26,13 @@
 #' @param height Height of the graphics region of the pdf file in inches, for both png and pdf format. Default is 7.
 #' @param png_res The nominal resolution in ppi of png file. Higher png_res indicates a bigger and more clear png file. Default is 720.
 #'
+#' @importFrom grDevices colorRampPalette dev.off pdf png
 #' @import ggsci
 #' @import ggpubr
-#' @import plyr
+#' @importFrom plyr count
 #' @import reshape2
 #' @import ggplot2
+#' @importFrom utils read.table write.table
 #' 
 #' @export
 

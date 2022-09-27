@@ -64,8 +64,8 @@ ATAC_Add_meta_data <- function(sg_lib, mtx, fragments, replicate = 1, cal.FRiP =
 #'
 #' @import ggplot2
 #' @import Seurat
-#' @import ggrastr
-#' @import cowplot
+#' @importFrom ggrastr geom_jitter_rast
+#' @importFrom cowplot plot_grid
 #' @export
 
 ATAC_scQC <- function (mtx, chromation.assay = FALSE, peak_frac = 0.01, nFeature = c(200, 500000), nCount = 1000, FRiP = 0.1, blank_NTC = FALSE, title.size = 20, x.text.size = 15, x.title.size = 15, y.text.size = 20, pt.size = 0.1, plot.show = FALSE, plot.save = TRUE, raster = FALSE, prefix = ".", label = "", width = 8.3, height = 8, png_res = 720) {
@@ -333,10 +333,10 @@ CalculateGeneActivity <- function(mtx, fragments, species = "Hs", version = "v75
 #' @import EnsDb.Hsapiens.v86
 #' @import EnsDb.Mmusculus.v75
 #' @import EnsDb.Mmusculus.v79
-#' @import ensembldb
-#' @import Signac
-#' @import GenomeInfoDb
-#' @import IRanges
+#' @importFrom ensembldb genes seqlevelsStyle
+#' @importFrom Signac GRangesToString Extend
+#' @importFrom GenomeInfoDb keepStandardChromosomes
+#' @importFrom IRanges trim
 #' @export
 
 GetPromoter <- function(species = "Hs", version = "v75", gene_type = "Symbol", protein_coding = TRUE, pro_up = 3000, pro_down = 0){

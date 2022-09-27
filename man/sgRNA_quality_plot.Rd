@@ -2,10 +2,60 @@
 % Please edit documentation in R/sgRNA_quality_plot.R
 \name{sgRNA_quality_plot}
 \alias{sgRNA_quality_plot}
-\title{function definitions ##### Plot for sgRNA information.}
+\title{sgRNA Information Visualization}
 \usage{
-sgRNA_quality_plot(sg_dir, mtx_dir, LABEL = "", prefix = "./")
+sgRNA_quality_plot(
+  mtx,
+  sg_lib,
+  title.size = 25,
+  legend.text.size = 12,
+  legend.title.size = 18,
+  x.text.size = 16,
+  x.title.size = 20,
+  y.text.size = 16,
+  y.title.size = 20,
+  label.size = 6,
+  plot.save = TRUE,
+  prefix = ".",
+  label = "",
+  width = 8,
+  height = 8,
+  png_res = 720
+)
+}
+\arguments{
+\item{mtx}{SeuratObject or directory to rds file of SeuratObject, with cell in columns and features in rows.}
+
+\item{sg_lib}{Data frame or directory to a txt file containing 3 columns: cell, barcode, gene. If sgRNA information stored in a matrix-like format or input data frame only has sgRNA frequency of each cell, use \code{\link[SCREE]{sgRNAassign}} to assign sgRNA to each cell.}
+
+\item{title.size}{Numeric, title size of the UMAP. Default is 25.}
+
+\item{legend.text.size}{Numeric, legend text size of the plot. Default is 12.}
+
+\item{legend.title.size}{Numeric, legend title size of the plot. Default is 18.}
+
+\item{x.text.size}{Numeric, x-axis text size of the plot. Default is 16.}
+
+\item{x.title.size}{Numeric, x-axis title size of the plot. Default is 20.}
+
+\item{y.text.size}{Numeric, y-axis text size of the plot. Default is 16.}
+
+\item{y.title.size}{Numeric, y-axis title size of the plot. Default is 20.}
+
+\item{label.size}{Label size of the the barplot.}
+
+\item{plot.save}{Logical, save plots or not. Default is \code{TRUE}.}
+
+\item{prefix}{Path to save the plots. Default is current directory.}
+
+\item{label}{The prefix label of the output file. Notably, there needs a separator between default file names and the label, so label would be better to be like "label_". Default is "".}
+
+\item{width}{Width of the graphics region of the pdf file in inches, for both png and pdf format. Default is 8.}
+
+\item{height}{Height of the graphics region of the pdf file in inches, for both png and pdf format. Default is 8.}
+
+\item{png_res}{The nominal resolution in ppi of png file. Higher png_res indicates a bigger and more clear png file. Default is 720.}
 }
 \description{
-function definitions ##### Plot for sgRNA information.
+Visualize cell numbers for each sgRNA and sgRNA numbers in each cell.
 }

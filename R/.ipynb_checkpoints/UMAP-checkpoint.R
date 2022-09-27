@@ -1,6 +1,6 @@
 #' Run UMAP and Visualization
 #'
-#' Run UMAP from SeuratObject after normalization and scale, and perform visualization, based on \code{\link[Seurat]}. 
+#' Run UMAP from SeuratObject after normalization and scale, and perform visualization, based on \code{\link{Seurat}}. 
 #'
 #' @param mtx SeuratObject or directory to rds file of SeuratObject, with cell in columns and features in rows. Note that the dataset has to be normalized and scaled, and need a sgRNA information column named "perturbations" in the meta data.
 #' @param assays Assay to use. Default is "RNA".
@@ -30,11 +30,12 @@
 #' @param height Height of the graphics region of the pdf file in inches, for both png and pdf format. Default is 7.
 #' @param png_res The nominal resolution in ppi of png file. Higher png_res indicates a bigger and more clear png file. Default is 720.
 #'
+#' @importFrom grDevices colorRampPalette dev.off pdf png
 #' @import ggplot2
 #' @import Seurat
 #' @export
 
-umap <- function(mtx, assays = "RNA", nfeature = 2000, selection.method = "vst", npcs = 50, dims = 1:40, reduction.prefix = "", algorithm = 1, resolution = 0.8, title.size = 25, legend.key.size = unit(0.7, "cm"), legend.text.size = 14, x.text.size = 16, x.title.size = 20, y.size.size = 16, y.title.size = 20, pt.size = 0.2, raster = FALSE, label.cut = 20, plot.show = TRUE, plot.return = FALSE, plot.save = TRUE, prefix = ".", label = "", width = 7, height = 7, png_res = 720){
+umap <- function(mtx, assays = "RNA", nfeature = 2000, selection.method = "vst", npcs = 50, dims = 1:40, reduction.prefix = "", algorithm = 1, resolution = 0.8, title.size = 25, legend.key.size = unit(0.7, "cm"), legend.text.size = 14, x.text.size = 16, x.title.size = 20, y.text.size = 16, y.title.size = 20, pt.size = 0.2, raster = FALSE, label.cut = 20, plot.show = TRUE, plot.return = FALSE, plot.save = TRUE, prefix = ".", label = "", width = 7, height = 7, png_res = 720){
     
     #read file
     
@@ -160,7 +161,7 @@ umap <- function(mtx, assays = "RNA", nfeature = 2000, selection.method = "vst",
 
 #' Run UMAP and Visualization
 #'
-#' Run UMAP from SeuratObject after normalization and scale, and perform visualization for scATAC-seq based input, based on \code{\link[Seurat]}. 
+#' Run UMAP from SeuratObject after normalization and scale, and perform visualization for scATAC-seq based input, based on \code{\link{Seurat}}. 
 #'
 #' @param mtx SeuratObject or directory to rds file of SeuratObject, with cell in columns and features in rows. Note that the dataset has to be normalized and scaled, and need a sgRNA information column named "perturbations" in the meta data.
 #' @param assays Assay to use. Default is "peak".

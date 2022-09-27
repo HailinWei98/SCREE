@@ -2,22 +2,39 @@
 % Please edit documentation in R/improved_scmageck_lr.R
 \name{improved_scmageck_lr}
 \alias{improved_scmageck_lr}
-\title{function definitions ##### Improved scMAGeCK_LR, save and return two data.frame:
-rownames indicates selected_gene while colnames indicates perturbations.}
+\title{Modified scMAGeCK Linear Regression}
 \usage{
 improved_scmageck_lr(
   BARCODE,
   RDS,
-  NEGCTRL,
+  NEGCTRL = "NTC",
   SELECT_GENE = NULL,
   LABEL = NULL,
   PERMUTATION = NULL,
-  SAVEPATH = "./",
+  SAVEPATH = ".",
   LAMBDA = 0.01,
   NTC_baseline = TRUE
 )
 }
+\arguments{
+\item{BARCODE}{Data frame or directory to a txt file containing 3 columns: cell, barcode, gene. If sgRNA information stored in a matrix-like format or sinput data frame only has sgRNA frequence of each cell, use \code{\link[SCREEN]{sgRNAassign}} to assign sgRNA to each cell.}
+
+\item{RDS}{SeuratObject or directory to rds file of SeuratObject, with cell in columns and features in rows. Note that the dataset has to be normalized and scaled. Can also be the data frame of scale data.}
+
+\item{NEGCTRL}{The name of the genes served as negative controls.}
+
+\item{SELECT_GENE}{The list of genes for regression. Default is \code{NULL}, all genes in the table are subject to regression.}
+
+\item{LABEL}{The label of the output file. Default is \code{NULL}, and the prefix of file will be "sample1".}
+
+\item{PERMUTATION}{The number of permutations for p value calculation. Default is \code{NULL}, and the permutations times will be 10000}
+
+\item{SAVEPATH}{The save path of result. Default save path is the current working directory. If you don't need save the result, set SAVEPATH as NULL.}
+
+\item{LAMBDA}{A paramter for the LR model for ridge regression. Default: 0.01.}
+
+\item{NTC_baseline}{Using negative control as baseline or not. Default is \code{TRUE}.}
+}
 \description{
-function definitions ##### Improved scMAGeCK_LR, save and return two data.frame:
-rownames indicates selected_gene while colnames indicates perturbations.
+Use linear regression to test the association of gene knockout with all possible genes. Modified from \code{\link[scMAGeCK]{scmageck_lr}}
 }

@@ -65,7 +65,7 @@ DApeaks <- function(mtx, selected, NTC = "NTC", min.pct = 0.1, test.use = "wilco
 #' Identify potential enhancer list from DA peaks.
 #'
 #' @param da_peak Data frame of DA peaks list, generated from \code{\link[SCREE]{DApeaks}}.
-#' @param gene_annotations Gene annotations stored in data frame format, including c("chromosome", "start", "end", "strand", "transcript") as colnames. Default is \code{NULL}, gene annotations are from \code{\link[ensembldb]}.
+#' @param gene_annotations Gene annotations stored in data frame format, including c("chromosome", "start", "end", "strand", "transcript") as colnames. Default is \code{NULL}, gene annotations are from \code{\link{ensembldb}}.
 #' @param overlap_cut Maximum overlap nucleotides between peaks and promoters. Default is 0.
 #' @param pro_up The number of nucleotides upstream of the transcription start site that should be included in the promoter region. Default is 3000.
 #' @param pro_down The number of nucleotides downstream of the transcription start site that should be included in the promoter region. Default is 0.

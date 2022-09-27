@@ -7,7 +7,7 @@
 #' @param score_cut Score cutoff of \code{improved_scmageck_lr} results. Default is 0.2.
 #' @param pval_cut P-value cutoff of \code{improved_scmageck_lr} results. Default is 0.05.
 #' @param DE_gene_to_use Differential gene set to use, can be one of "all" (all potential target genes), "up" (potential target genes with positive score), "down" (potential target genes with negative score). Default is "all".
-#' @param database The same as \code{OrgDb} in \code{\link[clusterProfiler]enrichGO}. Default is "org.Hs.eg.db".
+#' @param database The same as \code{OrgDb} in \code{\link[clusterProfiler]{enrichGO}}. Default is "org.Hs.eg.db".
 #' @param gene_type Type of gene names in the score and pval table, can be one of "Symbol", "Ensembl". Default is "Symbol".
 #' @param showCategory Numbers of each term to show. Default is 10.
 #' @param wrap_width Positive integer giving target line width in characters. A width less than or equal to 1 will put each word on its own line. Default is 150.
@@ -25,7 +25,9 @@
 #' @param height Height of the graphics region of the pdf file in inches, for both png and pdf format. Default is 8.
 #' @param png_res The nominal resolution in ppi of png file. Higher png_res indicates a bigger and more clear png file. Default is 720.
 #'
-#' @import clusterProfiler
+#' @importFrom grDevices colorRampPalette dev.off pdf png
+#' @importFrom utils read.table write.table
+#' @importFrom clusterProfiler enrichGO slice
 #' @import org.Hs.eg.db
 #' @import org.Mm.eg.db
 #' @import ggplot2

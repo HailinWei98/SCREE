@@ -2,29 +2,132 @@
 % Please edit documentation in R/IntegratedMixscape.R
 \name{IntegratedMixscape}
 \alias{IntegratedMixscape}
-\title{function definitions ##### Integrated some functions in Seurat as mentioned in
-vignette of Mixscape.Prefer Seurat object after QC.}
+\title{Integrated Mixscape Function}
 \usage{
 IntegratedMixscape(
-  mtx_dir,
-  sg_dir,
+  mtx,
+  sg_lib,
+  NTC = "NTC",
   sg.to.use = "all",
-  perturb.sig.only = FALSE,
+  sg.split = "_sgRNA",
   mixscape.only = FALSE,
+  perturb.sig.only = FALSE,
   nfeature = 2000,
+  selection.method = "vst",
+  npcs = 50,
   dims = 1:40,
   assays = "RNA",
   algorithm = 1,
-  label.cut = 20,
   resolution = 0.8,
-  NTC = "NTC",
-  prefix = "./",
-  label = "",
+  title.size = 16,
+  legend.key.size = unit(0.7, "cm"),
+  legend.text.size = 9,
+  x.text.size = 10,
+  x.title.size = 12,
+  y.text.size = 10,
+  y.title.size = 12,
+  pt.size = 0.2,
+  raster = FALSE,
+  label.cut = 20,
+  NTC.cal = TRUE,
+  table.save = TRUE,
+  top = NULL,
+  range = c(0, 1),
+  color = c("white", "coral1"),
+  cell = c(15, 20),
+  fontsize = 15,
+  angle = 90,
+  legend.title = FALSE,
+  plot.show = TRUE,
   plot.save = TRUE,
-  plot.show = TRUE
+  prefix = ".",
+  label = "",
+  width = 7,
+  height = 7,
+  png_res = 720
 )
 }
+\arguments{
+\item{mtx}{SeuratObject or directory to rds file of SeuratObject, with cell in columns and features in rows. Note that the dataset has to be normalized and scaled.}
+
+\item{sg_lib}{Data frame or directory to a txt file containing 3 columns: cell, barcode, gene. If sgRNA information stored in a matrix-like format or input data frame only has sgRNA frequency of each cell, use \code{\link[SCREE]{sgRNAassign}} to assign sgRNA to each cell.}
+
+\item{NTC}{The name of negative controls. Default is "NTC".}
+
+\item{sg.to.use}{Use all sgRNA in the sg_lib to calculate perturb signature and perturbation enrichment or only use the sgRNA of cells assigned unique sgRNA, can be one of "all", "single". Default is "all".}
+
+\item{sg.split}{String to split sgRNA name. Default is "_sgRNA", which means sgRNA named in the format like "gene_sgRNA1".}
+
+\item{mixscape.only}{Logical, only perform the mixscape step or not. Default is \code{FALSE}, if \code{TRUE}, the input SeuratObject should calculate perturb signature first. Users can set this parameter to \code{TRUE} if you don't want to calculate perturb signature again, for the same dataset.}
+
+\item{perturb.sig.only}{Logical, only calculate perturb signature or not. Default is \code{FALSE}.}
+
+\item{nfeature}{Number of features to select as top variable features; only used when selection.method is set to 'dispersion' or 'vst'. Default is 2000.}
+
+\item{selection.method}{How to choose top variable features. Choose one of : "vst", "mvp", "disp". See more details from the \code{selection.method} in \code{\link[Seurat]{FindVariableFeatures}}.}
+
+\item{npcs}{Total Number of PCs to compute and store. Default is 50.}
+
+\item{dims}{Dimensions of reduction to use as input. Default is 1:40.}
+
+\item{assays}{Assay to used for calculating perturb signature. Default is "RNA".}
+
+\item{algorithm}{Algorithm for modularity optimization (1 = original Louvain algorithm; 2 = Louvain algorithm with multilevel refinement; 3 = SLM algorithm; 4 = Leiden algorithm). Leiden requires the leidenalg python. Default is 1.}
+
+\item{resolution}{Value of the resolution parameter, use a value above (below) 1.0 if you want to obtain a larger (smaller) number of communities. Default is 0.8.}
+
+\item{title.size}{Numeric, title size of the UMAP. Default is 16.}
+
+\item{legend.key.size}{Numeric, legend key size of the UMAP. Default is unit(0.7, "cm").}
+
+\item{legend.text.size}{Numeric, legend text size of the UMAP. Default is 9.}
+
+\item{x.text.size}{Numeric, x-axis text size of the UMAP. Default is 10.}
+
+\item{x.title.size}{Numeric, x-axis title size of the UMAP. Default is 12.}
+
+\item{y.text.size}{Numeric, y-axis text size of the UMAP. Default is 10.}
+
+\item{y.title.size}{Numeric, y-axis title size of the UMAP. Default is 12.}
+
+\item{pt.size}{Point size of the UMAP. Default is 0.2.}
+
+\item{raster}{Logical, convert points to raster format, will be useful to reduce the storage cost of the output figure or pdf. Default is \code{FALSE}.}
+
+\item{label.cut}{Maximum perturbations to be labeled in the UMAP. Default is 20, which means to label top 20 perturbations ranked by cell numbers.}
+
+\item{NTC.cal}{Logical, calculate negative control or not. Default is \code{TRUE}, which will remove cells assigned with negative control from the SeuratObject.}
+
+\item{table.save}{Logical, save perturbation enrichment table or not. Default is \code{TRUE}.}
+
+\item{top}{Top perturbations with the highest enrichment ratio to visualize. Default is \code{NULL}, using all perturbations to visualize.}
+
+\item{range}{Range of the ratio. Since for some datasets, the max enrichment ratio among all perturbations is extremely small, the range can be set to a smaller limitation to enhance the enrichment. Default is c(0, 1).}
+
+\item{color}{Color for heatmap. Default is c("white", "coral1"), corresponding to the score from 0 to 1 or other ranges.}
+
+\item{cell}{Cell width and height settings for heatmap. If set this parameter to a single number or \code{NA}, cell width and height will be the same, and \code{NA} means the cell will be adaptive to the input perturbation numbers. If set this parameter to a vector including two numbers or \code{NA}, the first one will be cell width and the second one will be height.}
+
+\item{fontsize}{Fontsize of the heatmap. Default is 15.}
+
+\item{angle}{Angle of the column labels, right now one can choose only from few predefined options (0, 45, 90, 270 and 315). Default is 90.}
+
+\item{legend.title}{Include the title of legend in the heatmap or not. Default is FALSE.}
+
+\item{plot.show}{Logical, show the UMAP plot or not. Default is \code{TRUE}.}
+
+\item{plot.save}{Logical, save plots or not. Default is \code{TRUE}.}
+
+\item{prefix}{Path to save the plots. Default is current directory.}
+
+\item{label}{The prefix label of the output file. Notably, there needs a separator between default file names and the label, so label would be better to be like "label_". Default is "".}
+
+\item{width}{Width of the graphics region of the pdf file in inches, for both png and pdf format. Default is 7.}
+
+\item{height}{Height of the graphics region of the pdf file in inches, for both png and pdf format. Default is 7.}
+
+\item{png_res}{The nominal resolution in ppi of png file. Higher png_res indicates a bigger and more clear png file. Default is 720.}
+}
 \description{
-function definitions ##### Integrated some functions in Seurat as mentioned in
-vignette of Mixscape.Prefer Seurat object after QC.
+Integrated function to evaluate perturbation efficiency based on \code{\link[Seurat]{CalcPerturbSig}} and \code{\link[Seurat]{RunMixscape}}.
 }

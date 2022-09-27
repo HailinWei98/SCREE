@@ -42,14 +42,17 @@
 #' @param width Width of the graphics region of the pdf file in inches, for both png and pdf format. Default is 7.
 #' @param height Height of the graphics region of the pdf file in inches, for both png and pdf format. Default is 7.
 #' @param png_res The nominal resolution in ppi of png file. Higher png_res indicates a bigger and more clear png file. Default is 720.
+#'
+#' @importFrom grDevices colorRampPalette dev.off pdf png
+#' @importFrom utils read.table write.table
 #' @import Seurat
 #' @import ggplot2
-#' @import patchwork
-#' @import plyr
+#' @importFrom patchwork plot_layout
+#' @importFrom plyr count
 #' @import reshape2
 #' @export
 
-IntegratedMixscape<- function(mtx, sg_lib, NTC = "NTC", sg.to.use = "all", sg.split = "_sgRNA", mixscape.only = FALSE, perturb.sig.only = FALSE, nfeature = 2000, selection.method = "vst", npcs = 50, dims = 1 : 40, assays = "RNA", algorithm = 1, resolution = 0.8, title.size = 16, legend.key.size = unit(0.7, "cm"), legend.text.size = 9, x.text.size = 10, x.title.size = 12, y.size.size = 10, y.title.size = 12, pt.size = 0.2, raster = FALSE, label.cut = 20, NTC.cal = TRUE, table.save = TRUE, top = NULL, range = c(0, 1), color = c("white", "coral1"), cell = c(15, 20), fontsize = 15, angle = 90, legend.title = FALSE, plot.show = TRUE, plot.save = TRUE, prefix = ".", label = "", width = 7, height = 7, png_res = 720){
+IntegratedMixscape<- function(mtx, sg_lib, NTC = "NTC", sg.to.use = "all", sg.split = "_sgRNA", mixscape.only = FALSE, perturb.sig.only = FALSE, nfeature = 2000, selection.method = "vst", npcs = 50, dims = 1 : 40, assays = "RNA", algorithm = 1, resolution = 0.8, title.size = 16, legend.key.size = unit(0.7, "cm"), legend.text.size = 9, x.text.size = 10, x.title.size = 12, y.text.size = 10, y.title.size = 12, pt.size = 0.2, raster = FALSE, label.cut = 20, NTC.cal = TRUE, table.save = TRUE, top = NULL, range = c(0, 1), color = c("white", "coral1"), cell = c(15, 20), fontsize = 15, angle = 90, legend.title = FALSE, plot.show = TRUE, plot.save = TRUE, prefix = ".", label = "", width = 7, height = 7, png_res = 720){
     
     #set custom theme of plot
     

@@ -8,8 +8,10 @@
 #' @param species Only support "Hs" and "Mm", if input other species, \code{percent.mt} will be count as "Mm". Default is "Hs".
 #' @param replicate Directory of a txt file or a vector only containg the replicate information of each cell, in the same order of cells in SeuratObject. If no replicate information, we will consider that all cells are from the same replicate, and this parameter will be set as 1. Default is 1.
 #' 
-#' @import plyr
+#' @importFrom utils read.table write.table
+#' @importFrom plyr count
 #' @import Seurat
+#' 
 #' @export
 
 Add_meta_data <- function(sg_lib, mtx, cal.mt = TRUE, species = "Hs", replicate = 1){

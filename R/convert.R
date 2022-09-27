@@ -12,6 +12,7 @@
 #' @param barcode Name of the "barcode" column, only used for "DataFrame" type. Default is \code{"barcode"}.
 #' 
 #' @import reshape2
+#' @importFrom utils read.table write.table
 #' @export
 
 sgRNAassign <- function(sg_lib, type = "CountMatrix", row_names = FALSE, freq_cut = 20, freq_percent = 0.8, freq = "freq", cell = "cell", barcode = "barcode"){
