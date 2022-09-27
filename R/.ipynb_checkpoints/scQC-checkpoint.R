@@ -101,7 +101,7 @@ scQC<- function(mtx, species = "Hs", gene_frac = 0.01, nFeature = c(200, 5000), 
                                                      color = "black"),
                           axis.title.x = element_text(size = x.title.size), 
                           axis.text.y = element_text(hjust = 0.5, 
-                                                     size = y.size, 
+                                                     size = y.text.size, 
                                                      color = "black"))
 
     a <- perturb@meta.data

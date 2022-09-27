@@ -27,11 +27,11 @@
 #' @import ggsci
 #' @export
 
-sgRNA_quality_plot<- function(mtx, sg_lib, title.size = 25, legend.text.size = 12, legend.title.size = 18, x.text.size = 16, x.title.size = 20, y.text.size = 16, y.title.size = 20, label.size = 6, plot.save = TRUE, prefix = ".", label = "", width = 8, height = 8, png_res = 720){
+sgRNA_quality_plot <- function(mtx, sg_lib, title.size = 25, legend.text.size = 12, legend.title.size = 18, x.text.size = 16, x.title.size = 20, y.text.size = 16, y.title.size = 20, label.size = 6, plot.save = TRUE, prefix = ".", label = "", width = 8, height = 8, png_res = 720){
     
     #read files
     
-    if (is.character(mtx_dir)) {
+    if (is.character(mtx)) {
         message(paste("Reading RDS file:", mtx))
         mtx <- readRDS(mtx)
     } 
