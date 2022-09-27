@@ -555,7 +555,7 @@ IntegratedMixscape<- function(mtx, sg_lib, NTC = "NTC", sg.to.use = "all", sg.sp
                     pdf(file.path(pdf_dir, "mixscape_KO_percent.pdf"))
                     for (i in 1 : (ceiling(l/12))) {
                         png(file.path(ko_dir, paste(i, ".png", sep = "")), 
-                            width = width = width, height = height, unit = "in", res = png_res)
+                            width =  width, height = height, unit = "in", res = png_res)
                         print(plot_list[[i]])
                         dev.off()
                     }
