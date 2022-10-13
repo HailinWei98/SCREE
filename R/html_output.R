@@ -16,7 +16,7 @@
 #' @param NTC The name of negative controls. Default is "NTC".
 #' @param article Which article the dataset from (URL).
 #' @param data Data source.
-#' @param article_name Name of the article
+#' @param article_name Name of the article.
 #' @param data_name Name of the data.
 #' @param gene_type Type of gene name, selected from one of c("Symbol", "Ensembl"). Default is "Symbol".
 #' @param score_cut Score cutoff of \code{improved_scmageck_lr} results. Default is 0.2.
@@ -28,7 +28,7 @@
 #' @importFrom utils read.table write.table
 #' @export
 
-config_generation <- function(mtx, mtx_QC, sg_lib, score, pval, project, prefix = ".", label = "", species = "Hs", version = "v75", type = "ATAC", NTC = "NTC", article = "", data = "", article_name = "", data_name = "", gene_type = "Symbol", score_cut = 0.2, pval_cut = 0.05, DA = NULL, cicero = NULL, enhancer = NULL) {
+config_generation <- function(mtx, mtx_QC, sg_lib, score, pval, project, prefix = ".", label = "", species = "Hs", version = "v75", type = "ATAC", NTC = "NTC", article = "", data = "", article_name = "", data_name = "", gene_type = "Symbol", score_cut = 0.2, pval_cut = 0.05, DA = NULL, cicero = NULL, enhancer = NULL, base64 = FALSE) {
     
     if (is.character(mtx)) {
         message(paste("Reading RDS file:", mtx))
@@ -50,68 +50,70 @@ config_generation <- function(mtx, mtx_QC, sg_lib, score, pval, project, prefix 
     NTC_num <- length(unique(subset(sg_lib, gene %in% NTC)))
     
     #generate config of html
+    
+    if (species == "Hs") {
+        if (version == "v75") {
+            gene_anno <- "EnsDb.Hsapiens.v75(hg19)"
+        } else if(version == "v79") {
+            gene_anno <- "EnsDb.Hsapiens.v79(hg38)"
+        } else if(version == "v86") {
+            gene_anno <- "EnsDb.Hsapiens.v86(hg38)"
+        }
+    } else if(species == "Mm") {
+        if (version == "v75") {
+            gene_anno <- "EnsDb.Mmusculus.v75(mm9)"
+        } else if(version == "v79") {
+            gene_anno <- "EnsDb.Mmusculus.v79(mm10)"
+        }
+    }
+
+    if (gene_type == "Symbol") {
+        gene_label <- "Gene Symbol"
+    } else if (gene_type == "Ensembl") {
+        gene_label <- "Ensembl ID"
+    }
+
+    if (article != "") {
+        if (article_name == "") {
+            article_name <- article
+        }
+        article <- paste('<a href=\"', article, '\" target="view_window">', article_name, '</a>', sep = "")
+        #article <- paste0("'", article, "'")
+    }
+    
+    if (data != "") {
+        if (data_name == "") {
+            data_name <- data
+        }
+        data <- paste('<a href=\"', data, '\" target="view_window">', data_name, '</a>', sep = "")
+        #data <- paste0("'", data, "'")
+    }
 
     if (type == "ATAC") {
-        if (species == "Hs") {
-            if (version == "v75") {
-                gene_anno <- "EnsDb.Hsapiens.v75(hg19)"
-            } else if(version == "v79") {
-                gene_anno <- "EnsDb.Hsapiens.v79(hg38)"
-            } else if(version == "v86") {
-                gene_anno <- "EnsDb.Hsapiens.v86(hg38)"
-            }
-        } else if(species == "Mm") {
-            if (version == "v75") {
-                gene_anno <- "EnsDb.Mmusculus.v75(mm9)"
-            } else if(version == "v79") {
-                gene_anno <- "EnsDb.Mmusculus.v79(mm10)"
-            }
-        }
-        
-        if (gene_type == "Symbol") {
-            gene_label <- "Gene Symbol"
-        } else if (gene_type == "Ensembl") {
-            gene_label <- "Ensembl ID"
-        }
-            
-        if (article != "") {
-            if (article_name == "") {
-                article_name <- article
-            }
-            article <- paste('<a href=\"', article, '\" target="view_window">', article_name, '</a>', sep = "")
-        }
-            
-        if (data != "") {
-            if (data_name == "") {
-                data_name <- data
-            }
-            data <- paste('<a href=\"', data, '\" target="view_window">', data_name, '</a>', sep = "")
-        }
-        config <- c("", "", PerturbGene, sg_num, NTC_num, prefix, "single-cell CRISPR ATAC-seq screens", 
-                    project, gene_anno, gene_label,
-                    pval_cut, score_cut)
+
+        config <- c(article, data, PerturbGene, sg_num, NTC_num, prefix, "single-cell CRISPR ATAC-seq screens", 
+                    project, gene_anno, gene_label, score_cut, pval_cut)
         names(config) <- c("ArticlePath", "GEO", "PerturbGene", "sgNumbers", "NTC", 
                            "ResultsPath", "DataType", "Project", "ReferenceVersion",
                            "GeneVersion", "Score_cut", "pval_cut")
         
     } else if (type == "enhancer") {
-        config <- c("", "", PerturbGene, sg_num, NTC_num, prefix, "single-cell CRISPR RNA-seq screens", 
-                    project, gene_anno, gene_label,
-                    pval_cut, score_cut)
+        
+        config <- c(article, data, PerturbGene, sg_num, NTC_num, prefix, "single-cell CRISPR RNA-seq screens", 
+                    project, gene_anno, gene_label, score_cut, pval_cut)
         names(config) <- c("ArticlePath", "GEO", "PerturbGene", "sgNumbers", "NTC", 
                            "ResultsPath", "DataType", "Project", "ReferenceVersion",
                            "GeneVersion", "Score_cut", "pval_cut")
     } else if (type == "RNA") {
-        config <- c("", "", PerturbGene, sg_num, NTC_num, prefix, "single-cell CRISPR RNA-seq screens", 
-                    project, gene_anno, gene_label,
-                    pval_cut, score_cut)
+        config <- c(article, data, PerturbGene, sg_num, NTC_num, prefix, "single-cell CRISPR RNA-seq screens", 
+                    project, gene_anno, gene_label, score_cut, pval_cut)
         names(config) <- c("ArticlePath", "GEO", "PerturbGene", "sgNumbers", "NTC", 
                            "ResultsPath", "DataType", "Project", "ReferenceVersion",
                            "GeneVersion", "Score_cut", "pval_cut") 
     }
 
-    config <- paste(names(config), config, collapse = "\" , \"", sep = "\" : \"")
-    config <- paste("\"Config\" : {\"", config, "\"}", sep = "")
+    config <- paste(names(config), config, collapse = "\' , \'", sep = "\' : \'")
+    config <- paste("\"Config\" : {\'", config, "\'}", sep = "")
         
         
     #generate single-cell quality of html
@@ -121,12 +123,27 @@ config_generation <- function(mtx, mtx_QC, sg_lib, score, pval, project, prefix 
         frag <- file.path("results", "ATAC_quality", "img", paste(label, "FragmentsSize.png", sep = ""))
         umap1 <- file.path("results", "ATAC_quality", "UMAP", "img", paste(label, "umap_seurat_clusters.png", sep = ""))
         umap2 <- file.path("results", "ATAC_quality", "UMAP", "img", paste(label, "umap_perturbations.png", sep = ""))
+        
+        if (base64 == TRUE) {
+            vln <- knitr::image_uri(file.path(prefix, vln))
+            frag <- knitr::image_uri(file.path(prefix, frag))
+            umap1 <- knitr::image_uri(file.path(prefix, umap1))
+            umap2 <- knitr::image_uri(file.path(prefix, umap2))
+        }
+        
         sg_figure <- c(vln, frag, umap1, umap2)
         names(sg_figure) <- c("vlnplot", "fragments", "UMAP1", "UMAP2")
     } else {
         vln <- file.path("results", "quality", "img", paste(label, "raw_matrix_quality_vlnplot.png", sep = ""))
         umap1 <- file.path("results", "quality", "UMAP", "img", paste(label, "umap_seurat_clusters.png", sep = ""))
         umap2 <- file.path("results", "quality", "UMAP", "img", paste(label, "umap_perturbations.png", sep = ""))
+        
+        if (base64 == TRUE) {
+            vln <- knitr::image_uri(file.path(prefix, vln))
+            umap1 <- knitr::image_uri(file.path(prefix, umap1))
+            umap2 <- knitr::image_uri(file.path(prefix, umap2))
+        }
+        
         sg_figure <- c(vln, umap1, umap2)
         names(sg_figure) <- c("vlnplot", "UMAP1", "UMAP2")
     }
@@ -145,17 +162,28 @@ config_generation <- function(mtx, mtx_QC, sg_lib, score, pval, project, prefix 
     info <- paste("\"quality\" : {\"", paste(info, sg_figure, sep = "\" , "), "}", sep = "")
 
     #generate sgRNA information of html
-    
-    img_prefix <- file.path("results", "sgRNA", "sgRNA_quality_of_gene", "img")
+        
+    img_prefix <- file.path("results", "sgRNA", "img", "sgRNA_quality_of_gene")
     sg_right <- c(file.path("results", "sgRNA", "img", paste(label, "cell_numbers.png", sep = "")))
+    if (base64 == TRUE) {
+        sg_right <- knitr::image_uri(file.path(prefix, sg_right))
+    }
     sg_lib_filtered <- subset(sg_lib, cell %in% intersect(sg_lib$cell, colnames(mtx)))
     for (genes in sort(unique(sg_lib_filtered$gene))) {
-        sg_right <- c(sg_right, file.path(img_prefix, paste(genes, ".png", sep = "")))
+        sg_right_genes <- file.path(img_prefix, paste(genes, ".png", sep = ""))
+        if (base64 == TRUE) {
+            sg_right_genes <- knitr::image_uri(file.path(prefix, sg_right_genes))
+        }
+        sg_right <- c(sg_right, sg_right_genes)
     }
     names(sg_right) <- c("Top10", sort(unique(sg_lib_filtered$gene)))
     sg_right <- paste(names(sg_right), sg_right, collapse = "\" , \"", sep = "\" : \"")
     sg_right <- paste("\"right\" : {\"", sg_right, "\"}", sep = "")
-    sg_left <- paste("left\" : \"", file.path("results", "sgRNA", "img", paste(label, "sgRNA_numbers.png", sep = "")))
+    sg_left_path <- file.path("results", "sgRNA", "img", paste(label, "sgRNA_numbers.png", sep = ""))
+    if (base64 == TRUE) {
+        sg_left_path <- knitr::image_uri(file.path(prefix, sg_left_path))
+    }
+    sg_left <- paste("left\" : \"", sg_left_path)
     sg <- paste("\"sgRNA\" : {\"", paste(sg_left, sg_right, sep = "\" , "), "}", sep = "")
 
     #generate Mixscape information of html
@@ -166,38 +194,60 @@ config_generation <- function(mtx, mtx_QC, sg_lib, score, pval, project, prefix 
                                paste(label, "umap_seurat_clusters.png", sep = "")), 
                      file.path("results", "perturbation_efficiency", "mixscape", "img",
                                 paste(label, "umap_perturbations.png", sep = "")))
+        if (base64 == TRUE) {
+            cluster <- c(knitr::image_uri(file.path(prefix, cluster[1])), knitr::image_uri(file.path(prefix, cluster[2])))
+        }
+        
         names(cluster) <- c("UMAP1", "UMAP2")
         cluster <- paste(names(cluster), cluster, collapse = "\" , \"", sep = "\" : \"")
-        cluster <- paste("{\"", cluster, "\"}", sep = "")
+        cluster <- paste("\"clustering\" : {\"", cluster, "\"}", sep = "")
+        # umap <- c(file.path("results", "perturbation_efficiency", "mixscape", "img", 
+        #                     paste(label, "mixscape_before.png", sep = "")), 
+        #           file.path("results", "perturbation_efficiency", "mixscape", "img", 
+        #                     paste(label, "mixscape_after.png", sep = "")),
+        #           cluster)
         umap <- c(file.path("results", "perturbation_efficiency", "mixscape", "img", 
                             paste(label, "mixscape_before.png", sep = "")), 
                   file.path("results", "perturbation_efficiency", "mixscape", "img", 
-                            paste(label, "mixscape_after.png", sep = "")),
-                  cluster)
+                            paste(label, "mixscape_after.png", sep = "")))
+        
         mixscape_heatmap <- c(file.path("results", "perturbation_efficiency", "img", 
                                         paste(label, "before_perturb_ratio.png", sep = "")),
                               file.path("results", "perturbation_efficiency", "img", 
                                         paste(label, "after_perturb_ratio.png", sep = "")))
-
+        
+        if (base64 == TRUE) {
+            umap <- c(knitr::image_uri(file.path(prefix, umap[1])), knitr::image_uri(file.path(prefix, umap[2])))
+            mixscape_heatmap <- c(knitr::image_uri(file.path(prefix, mixscape_heatmap[1])), 
+                                  knitr::image_uri(file.path(prefix, mixscape_heatmap[2])))
+        }
     } else {
         umap <- c(file.path("results", "perturbation_efficiency", "mixscape", "img", 
                             paste(label, "mixscape_before.png", sep = "")), "", "")
         mixscape_heatmap <- c("", "")
+        if (base64 == TRUE) {
+            umap <- c(knitr::image_uri(file.path(prefix, umap[1])), "", "")
+        }
     }
 
-    names(umap) <- c("before", "after", "clustering")
+    #names(umap) <- c("before", "after", "clustering")
+    names(umap) <- c("before", "after")
     umap <- paste(names(umap), umap, collapse = "\" , \"", sep = "\" : \"")
-    umap <- paste("\"UMAP\" : {\"", umap, "\"}", sep = "")
+    umap <- paste("\"UMAP\" : {\"", umap, "\"", " , ", cluster, "}", sep = "")
     names(mixscape_heatmap) <- c("before", "after")
     mixscape_heatmap <- paste(names(mixscape_heatmap), mixscape_heatmap, collapse = "\" , \"", sep = "\" : \"")
     mixscape_heatmap <- paste("\"heatmap\" : {\"", mixscape_heatmap, "\"}", sep = "")
 
-    if (dir.exists(file.path(prefix, "results", "perturbation_efficiency", "mixscape", "KO_percent", "img", ""))) {
-        l <- length(list.files(file.path(prefix, "results", "perturbation_efficiency", "mixscape", "KO_percent", "img", "")))
+    if (dir.exists(file.path(prefix, "results", "perturbation_efficiency", "mixscape", "img", "KO_percent", ""))) {
+        l <- length(list.files(file.path(prefix, "results", "perturbation_efficiency", "mixscape", "img", "KO_percent", "")))
         ko <- c()
         for (i in 1 : l) {
-            ko <- c(ko, file.path("results", "perturbation_efficiency", "mixscape", "KO_percent", "img", 
-                                  paste(i, ".png", sep = "")))
+            ko_path <- file.path("results", "perturbation_efficiency", "mixscape", "img", "KO_percent",
+                                 paste(i, ".png", sep = ""))
+            if (base64 == TRUE) {
+                ko_path <- knitr::image_uri(file.path(prefix, ko_path))
+            }
+            ko <- c(ko, ko_path)
         }
         names(ko) <- seq(1 : l)
         ko <- paste(names(ko), ko, collapse = "\" , \"", sep = "\" : \"")
@@ -214,7 +264,11 @@ config_generation <- function(mtx, mtx_QC, sg_lib, score, pval, project, prefix 
     prefix_volcano <- file.path("results", "perturbation_efficiency", "volcano", "img")
     volcano <- c()
     for (genes in sort(colnames(score))) {
-        volcano <- c(volcano, file.path(prefix_volcano, paste(genes, ".png", sep = "")))
+        volcano_genes <- file.path(prefix_volcano, paste(genes, ".png", sep = ""))
+        if (base64 == TRUE) {
+            volcano_genes <- knitr::image_uri(file.path(prefix, volcano_genes))
+        }
+        volcano <- c(volcano, volcano_genes)
     }
     names(volcano) <- sort(colnames(score))
     volcano <- paste(names(volcano), volcano, collapse = "\" , \"", sep = "\" : \"")
@@ -225,10 +279,14 @@ config_generation <- function(mtx, mtx_QC, sg_lib, score, pval, project, prefix 
         sc <- c(file.path("results", "perturbation_efficiency", "img", 
                           paste(label, "DE_gene_cutoff", score_cut, "_p", pval_cut, ".png", sep = "")),
                 file.path("results", "perturbation_efficiency", "img", paste(label, "correlation_heatmap.png", sep = "")))
+        if (base64 == TRUE) {
+            sc <- c(knitr::image_uri(file.path(prefix, sc[1])), knitr::image_uri(file.path(prefix, sc[2])))
+        }
     } else {
         sc <- c(file.path("results", "perturbation_efficiency", "img", 
                           paste(label, "DE_gene_cutoff", score_cut, "_p", pval_cut, ".png", sep = "")), 
                 "")
+        sc <- c(knitr::image_uri(file.path(prefix, sc[1])), "")
     }
     names(sc) <- c("barplot", "heatmap")
     sc <- paste(names(sc), sc, collapse = "\" , \"", sep = "\" : \"")
@@ -248,7 +306,13 @@ config_generation <- function(mtx, mtx_QC, sg_lib, score, pval, project, prefix 
         a_scmageck <- subset(a_scmageck, abs(score) > score_cut & p_val < pval_cut)
         if (paste(i, ".png", sep = "") %in% go) {
             k <- k + 1
-            GO <- c(GO, file.path("results", "potential_target_gene", "GO", "img", paste(i, ".png", sep = "")))
+            GO_genes <- file.path("results", "potential_target_gene", "GO", "img", paste(i, ".png", sep = ""))
+            
+            if (base64 == TRUE) {
+                GO_genes <- knitr::image_uri(file.path(prefix, GO_genes))
+            }
+            
+            GO <- c(GO, GO_genes)
             names(GO)[k] <- i
         }
         if (nrow(a_scmageck) == 0) {
@@ -262,7 +326,7 @@ config_generation <- function(mtx, mtx_QC, sg_lib, score, pval, project, prefix 
             results <- rbind(results, de)
             de <- paste("<tr><td>", de$Perturbations, 
                         "</td><td>", de$target, 
-                        "</td><td>", de$score, 
+                        "</td><td>", round(de$score, 3), 
                         "</td><td>", de$p_val, 
                         "</td></tr>", sep = "")
             de <- paste(de, collapse = "", sep = "")
@@ -273,7 +337,7 @@ config_generation <- function(mtx, mtx_QC, sg_lib, score, pval, project, prefix 
     if (nrow(results) != 0) {
         all_de <- paste("<tr><td>", results$Perturbations, 
                         "</td><td>", results$target, 
-                        "</td><td>", results$score, 
+                        "</td><td>", round(results$score, 3), 
                         "</td><td>", results$p_val, 
                         "</td></tr>", sep = "")
         all_de <- paste(all_de, collapse = "", sep = "")
@@ -311,9 +375,15 @@ config_generation <- function(mtx, mtx_QC, sg_lib, score, pval, project, prefix 
                                                        "enhancer_gene_expression", "img", ""), perturb)
 
                 l <- length(list.files(file.path(enhancer_prefix)))
-                for(i in 1 : l){
-                    enhancer <- c(enhancer, paste(file.path("results", "enhancer_function", 
-                                                            "enhancer_gene_expression", "img", perturb, i), ".png", sep = ""))
+                for (i in 1 : l) {
+                    enhancer_i <- paste(file.path("results", "enhancer_function", 
+                                                  "enhancer_gene_expression", "img", perturb, i), ".png", sep = "")
+                    
+                    if (base64 == TRUE) {
+                        enhancer_i <- knitr::image_uri(file.path(prefix, enhancer_i))
+                    }
+                    
+                    enhancer <- c(enhancer, enhancer_i)
                     names(enhancer)[i] <- i
                 }
                 
@@ -341,7 +411,14 @@ config_generation <- function(mtx, mtx_QC, sg_lib, score, pval, project, prefix 
                 #get html config
                 
                 k <- k + 1
-                cicero <- c(cicero, file.path("results", "enhancer_function", "cicero", "img", paste(j, ".png", sep = "")))
+                
+                cicero_i <- file.path("results", "enhancer_function", "cicero", "img", paste(j, ".png", sep = ""))
+                
+                if (base64 == TRUE) {
+                    cicero_i <- knitr::image_uri(file.path(prefix, cicero_i))
+                }
+                
+                cicero <- c(cicero, cicero_i)
                 names(cicero)[k] <- j
             }
             cicero <- paste(names(cicero), cicero, collapse = "\" , \"", sep = "\" : \"")
@@ -363,7 +440,7 @@ config_generation <- function(mtx, mtx_QC, sg_lib, score, pval, project, prefix 
        
     results <- paste("\"Results\" : {", results, "}", sep = "")
     final <- paste(config, results, sep = " , ")
-    final <- paste("\nvar SCREEN_result = {", final, "};\n", sep = "")
+    final <- paste("\nvar SCREE_result = {", final, "};\n", sep = "")
         
     return(final)
         

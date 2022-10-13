@@ -6,7 +6,7 @@
 \usage{
 ATAC_scQC(
   mtx,
-  chromation.assay = FALSE,
+  chromatin.assay = FALSE,
   peak_frac = 0.01,
   nFeature = c(200, 5e+05),
   nCount = 1000,
@@ -30,7 +30,7 @@ ATAC_scQC(
 \arguments{
 \item{mtx}{SeuratObject or directory to rds file of SeuratObject, with cell in columns and features in rows.}
 
-\item{chromation.assay}{Logical, is the assay in the SeuratObject a ChromatinAssay or not. Default is \code{FALSE}}
+\item{chromatin.assay}{Logical, is the assay in the SeuratObject a ChromatinAssay or not. Default is \code{FALSE}}
 
 \item{peak_frac}{A paramter for filtering low accessibility peaks. By default, only peaks that have counts in at least that fractions of cells are kept. Default is 0.01.}
 

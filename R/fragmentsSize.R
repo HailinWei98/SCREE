@@ -94,7 +94,7 @@ fragmentsSize <- function(mtx, fragments, CBCindex = 4, startIndex = 2, endIndex
         }
 
 
-        pdf(file = file.path(dir, paste(label, "FragmentsSize.pdf", sep = "")), 
+        pdf(file = file.path(pdf_dir, paste(label, "FragmentsSize.pdf", sep = "")), 
             width = width, height = height)
         print(g1)
         dev.off()

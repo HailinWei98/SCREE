@@ -183,8 +183,13 @@ ciceroPlot <- function(score, pval, selected = NULL, species = "Hs", version = "
                                 file.path("results/enhancer_function/cicero/img", 
                                           paste(selected, ".png", sep = "")), 
                                 sep = "\" : \"")
+                cicero_base64 <- paste(selected, 
+                                       knitr::image_uri(file.path(prefix, "results/enhancer_function/cicero/img", 
+                                                                  paste(selected, ".png", sep = ""))), 
+                                       sep = "\" : \"")
                 cicero <- paste("\"cicero\" : {\"", cicero, "\"}", sep = "")
-                return(list(gg, cicero))  
+                cicero_base64 <- paste("\"cicero\" : {\"", cicero_base64, "\"}", sep = "")
+                return(list(gg, cicero, cicero_base64))  
                 
             } else {
                 return(gg)  
@@ -196,6 +201,7 @@ ciceroPlot <- function(score, pval, selected = NULL, species = "Hs", version = "
             
             results <- list()
             cicero <- c()
+            cicero_base64 <- c()
             j <- 0
             for (perturb in selected) {
                 
@@ -265,7 +271,11 @@ ciceroPlot <- function(score, pval, selected = NULL, species = "Hs", version = "
                     cicero <- c(cicero, 
                                 file.path("results/enhancer_function/cicero/img", 
                                           paste(perturb, ".png", sep = "")))
+                    cicero_base64 <- c(cicero, 
+                                       knitr::image_uri(file.path(prefix, "results/enhancer_function/cicero/img", 
+                                                                  paste(perturb, ".png", sep = ""))))
                     names(cicero)[j] <- perturb
+                    names(cicero_base64)[j] <- perturb
                 }
                 
             }
@@ -273,7 +283,9 @@ ciceroPlot <- function(score, pval, selected = NULL, species = "Hs", version = "
             if (html_config == TRUE) {
                 cicero <- paste(names(cicero), cicero, collapse = "\" , \"", sep = "\" : \"")
                 cicero <- paste("\"cicero\" : {\"", cicero, "\"}", sep = "")
-                return(list(results, cicero))
+                cicero_base64 <- paste(names(cicero_base64), cicero_base64, collapse = "\" , \"", sep = "\" : \"")
+                cicero_base64 <- paste("\"cicero\" : {\"", cicero_base64, "\"}", sep = "")
+                return(list(results, cicero, cicero_base64))
             } else {
                 return(results)
             }
@@ -613,7 +625,7 @@ get_results <- function(chr, start, end, minbp, maxbp, gene_anno, track_size, ge
 #' @param NTC The name of negative controls. Default is "NTC".
 #' @param min.pct only test genes that are detected in a minimum fraction of min.pct cells in either of the selected perturbation or NTC. Meant to speed up the function by not testing genes that are very infrequently expressed. Default is 0.1.
 #' @param test.use Denotes which test to use. Available options are: "wilcox", "bimod", "roc", "t", "negbinom", "poisson", "LR", "MAST", "DESeq2". See details from \code{\link[Seurat]{FindMarkers}}. Default is "wilcox".
-#' @param p_adj_cut Maximum adjust p_value to . Default is 0.05.
+#' @param p_adj_cut Maximum adjust p_value. Default is 0.05.
 #' @param logFC_cut Limit testing to genes which show, on average, at least X-fold difference (log-scale) between the two groups of cells. Default is 0.25. Increasing logfc.threshold speeds up the function, but can miss weaker.
 #' @param score_cut Score cutoff of \code{improved_scmageck_lr} results. Default is 0.
 #' @param pval_cut P-value cutoff of \code{improved_scmageck_lr} results. Default is 0.05.
@@ -642,11 +654,6 @@ get_results <- function(chr, start, end, minbp, maxbp, gene_anno, track_size, ge
 #' @importFrom utils read.table write.table
 #' @importFrom grDevices colorRampPalette dev.off pdf png
 #' @importFrom ensembldb genes
-#' @import EnsDb.Hsapiens.v75
-#' @import EnsDb.Hsapiens.v79
-#' @import EnsDb.Hsapiens.v86
-#' @import EnsDb.Mmusculus.v75
-#' @import EnsDb.Mmusculus.v79
 #' @import GenomeInfoDb
 #' @importFrom IRanges IRanges
 #' @import ggplotify
@@ -775,7 +782,7 @@ ATACciceroPlot<- function(mtx, score, pval, selected =  NULL, DA_peaks = NULL, s
                                          p_val_adj = da_peak$p_val_adj)
                     new_da <- paste("<tr><td>", new_da$Perturbations, 
                                     "</td><td>", new_da$DApeaks, 
-                                    "</td><td>", new_da$log2FC, 
+                                    "</td><td>", round(new_da$log2FC, 3), 
                                     "</td><td>", new_da$p_val_adj, 
                                     "</td></tr>", sep = "")
                 }
@@ -897,6 +904,7 @@ ATACciceroPlot<- function(mtx, score, pval, selected =  NULL, DA_peaks = NULL, s
             da_index <- 0
             html_results <- data.frame()
             all_cicero <- c()
+            all_cicero_base64 <- c()
             if (table.save == TRUE) {
                 all_peak <- data.frame()
             }
@@ -947,7 +955,7 @@ ATACciceroPlot<- function(mtx, score, pval, selected =  NULL, DA_peaks = NULL, s
                         names(html_results) <- c("Perturbations", "DApeaks", "log2FC", "p_val_adj")
                         new_da <- paste("<tr><td>", new_da$Perturbations, 
                                         "</td><td>", new_da$DApeaks, 
-                                        "</td><td>", new_da$log2FC, 
+                                        "</td><td>", round(new_da$log2FC, 3), 
                                         "</td><td>", new_da$p_val_adj, 
                                         "</td></tr>", sep = "")
                         new_da <- paste("", new_da, collapse = "", sep = "")
@@ -980,6 +988,7 @@ ATACciceroPlot<- function(mtx, score, pval, selected =  NULL, DA_peaks = NULL, s
                 j <- 0
                 
                 cicero <- c()
+                cicero_base64 <- c()
                 
                 if (plot.save == TRUE) {
 
@@ -1022,7 +1031,10 @@ ATACciceroPlot<- function(mtx, score, pval, selected =  NULL, DA_peaks = NULL, s
                     if (html_config == TRUE) {
                         cicero_prefix <- file.path("results/enhancer_function/cicero/img", TF)
                         cicero <- c(cicero, paste(file.path(cicero_prefix, peak), ".png", sep = ""))
+                        cicero_base64 <- c(cicero_base64, 
+                                           knitr::image_uri(paste(file.path(prefix, cicero_prefix, peak), ".png", sep = "")))
                         names(cicero)[j] <- peak
+                        names(cicero_base64)[j] <- peak
                     }
                     
                     gg <- gg + 
@@ -1054,7 +1066,10 @@ ATACciceroPlot<- function(mtx, score, pval, selected =  NULL, DA_peaks = NULL, s
                     if (length(cicero) != 0) {
                         cicero <- paste(names(cicero), cicero, collapse = "\" , \"", sep = "\" : \"")
                         cicero <- paste("\"", TF, "\" : {\"", cicero, "\"}", sep = "")
+                        cicero_base64 <- paste(names(cicero_base64), cicero_base64, collapse = "\" , \"", sep = "\" : \"")
+                        cicero_base64 <- paste("\"", TF, "\" : {\"", cicero_base64, "\"}", sep = "")
                         all_cicero <- c(all_cicero, cicero)
+                        all_cicero_base64 <- c(all_cicero_base64, cicero_base64)
                     }
                 }
 
@@ -1077,7 +1092,7 @@ ATACciceroPlot<- function(mtx, score, pval, selected =  NULL, DA_peaks = NULL, s
                 if (nrow(html_results) != 0) {
                     all_da <- paste("<tr><td>", html_results$Perturbations, 
                                     "</td><td>", html_results$DApeaks, 
-                                    "</td><td>", html_results$log2FC, 
+                                    "</td><td>", round(html_results$log2FC, 3), 
                                     "</td><td>", html_results$p_val_adj, 
                                     "</td></tr>", sep = "")
                     all_da <- paste(all_da, collapse = "", sep = "")
@@ -1091,12 +1106,14 @@ ATACciceroPlot<- function(mtx, score, pval, selected =  NULL, DA_peaks = NULL, s
                 DA <- paste("\"DApeaks\" : {\"", DA, "\"}", sep = "")
                 all_cicero <- paste("", all_cicero, collapse = ", ", sep = "")
                 all_cicero <- paste("\"cicero\" : {", all_cicero, "}", sep = "")
+                all_cicero_base64 <- paste("", all_cicero_base64, collapse = ", ", sep = "")
+                all_cicero_base64 <- paste("\"cicero\" : {", all_cicero_base64, "}", sep = "")
             }
         }
         if (html_config == FALSE) {
             return(results)
         } else {
-            return(list(results, DA, all_cicero))
+            return(list(results, DA, all_cicero, all_cicero_base64))
         }
     } else {
         stop("Please input correct format of selected perturbations")

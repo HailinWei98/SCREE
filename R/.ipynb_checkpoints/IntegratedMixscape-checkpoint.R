@@ -59,9 +59,9 @@ IntegratedMixscape<- function(mtx, sg_lib, NTC = "NTC", sg.to.use = "all", sg.sp
     custom_theme <- theme(
         plot.title = element_text(size = title.size, hjust = 0.5),
         legend.key.size = legend.key.size,
-        legend.text = element_text(size = legend.text))
+        legend.text = element_text(size = legend.text.size))
 
-    if (is.character(mtx_dir)) {
+    if (is.character(mtx)) {
         message(paste("Reading RDS file:", mtx))
         eccite <- readRDS(mtx)
     } else {
@@ -70,7 +70,7 @@ IntegratedMixscape<- function(mtx, sg_lib, NTC = "NTC", sg.to.use = "all", sg.sp
     
     if (is.character(sg_lib)) {
         message(paste("Reading sgRNA lib file:", sg_lib))
-        sg_lib <- read.table(sg_dir, header = T)
+        sg_lib <- read.table(sg_lib, header = T)
     } 
 
     #replicate information
@@ -98,7 +98,7 @@ IntegratedMixscape<- function(mtx, sg_lib, NTC = "NTC", sg.to.use = "all", sg.sp
 
         # Prepare RNA assay for dimensionality reduction:
 
-        eccite <- umap(mtx = eccite, nfeature = nfeature, selection.method = selection.method, npcs = npcs, dims = dims, assays = assays, algorithm = algorithm, reduction.prefix = reduction.prefix, prefix = prefix, label = label, label.cut = label.cut, resolution = resolution, raster = raster, title.size = title.size, legend.key.size = legend.key.size, legend.text.size = legend.text.size, x.text.size = x.text.size, x.title.size = x.title.size, y.text.size = y.text.size, y.title.size = y.title.size, pt.size = pt.size, plot.show = FALSE, plot.save = TRUE, plot.return = TRUE)
+        eccite <- umap(mtx = eccite, nfeature = nfeature, selection.method = selection.method, npcs = npcs, dims = dims, assays = assays, algorithm = algorithm, reduction.prefix = "", label.cut = label.cut, resolution = resolution, raster = raster, title.size = title.size, legend.key.size = unit(0.1, "pt"), legend.text.size = 8, x.text.size = x.text.size, x.title.size = x.title.size, y.text.size = y.text.size, y.title.size = y.title.size, pt.size = pt.size, plot.show = FALSE, plot.save = TRUE, prefix = prefix, label = label, plot.return = TRUE, width = width / 2, height = height / 2)
         
         p_p <- eccite[[2]]
         p_c <- eccite[[3]]
@@ -188,7 +188,7 @@ IntegratedMixscape<- function(mtx, sg_lib, NTC = "NTC", sg.to.use = "all", sg.sp
         VariableFeatures(object = eccite) <- VariableFeatures(object = eccite[[assays]])
         eccite <- ScaleData(object = eccite, do.scale = F, do.center = T)
 
-        eccite <- umap(mtx = eccite, nfeature = nfeature, selection.method = selection.method, npcs = npcs, dims = dims, assays = "PRTB", algorithm = algorithm, reduction.prefix = "prtb", prefix = prefix, label = label, label.cut = label.cut, resolution = resolution, raster = raster, title.size = title.size, legend.key.size = legend.key.size, legend.text.size = legend.text.size, x.text.size = x.text.size, x.title.size = x.title.size, y.text.size = y.text.size, y.title.size = y.title.size, pt.size = pt.size, plot.show = FALSE, plot.save = TRUE, plot.return = TRUE)
+        eccite <- umap(mtx = eccite, nfeature = nfeature, selection.method = selection.method, npcs = npcs, dims = dims, assays = "PRTB", algorithm = algorithm, reduction.prefix = "prtb", label.cut = label.cut, resolution = resolution, raster = raster, title.size = title.size, legend.key.size = unit(0.1, "pt"), legend.text.size = 8, x.text.size = x.text.size, x.title.size = x.title.size, y.text.size = y.text.size, y.title.size = y.title.size, pt.size = pt.size, plot.show = FALSE, plot.save = FALSE, plot.return = TRUE)
         
         q_p <- eccite[[2]]
         q_c <- eccite[[3]]
@@ -262,7 +262,7 @@ IntegratedMixscape<- function(mtx, sg_lib, NTC = "NTC", sg.to.use = "all", sg.sp
                 dir.create(pdf_dir)
             }
             
-            img_dir <- file.path(prefix, "img")
+            img_dir <- file.path(dir, "img")
             if (!(dir.exists(img_dir))) {
                 dir.create(img_dir)
             }
@@ -295,22 +295,43 @@ IntegratedMixscape<- function(mtx, sg_lib, NTC = "NTC", sg.to.use = "all", sg.sp
             print((p | q))
             dev.off()
             
-            pdf(file = file.path(pdf_dir, paste(label, "umap_perturbations.pdf", sep = "")), width = width, height = height)
+#             pdf(file = file.path(pdf_dir, paste(label, "before_umap_perturbations.pdf", sep = "")), 
+#                 width = width / 2, height = height / 2)
+#             print(p_p)
+#             dev.off()
+
+#             pdf(file = file.path(pdf_dir, paste(label, "before_umap_seurat_clusters.pdf", sep = "")), 
+#                 width = width / 2, height = height / 2)
+#             print(p_c)
+#             dev.off()
+
+#             png(file.path(img_dir, paste(label, "before_umap_perturbations.png", sep = "")), 
+#                 width = width / 2, height = height / 2, unit = "in", res = png_res)
+#             print(p_p)
+#             dev.off()
+
+#             png(file.path(img_dir, paste(label, "before_umap_seurat_clusters.png", sep = "")), 
+#                 width = width / 2, height = height / 2, unit = "in", res = png_res)
+#             print(p_c)
+#             dev.off()
+            
+            pdf(file = file.path(pdf_dir, paste(label, "umap_perturbations.pdf", sep = "")), 
+                width = width / 2, height = height / 2)
             print(q_p)
             dev.off()
 
-
-            pdf(file = file.path(pdf_dir, paste(label, "umap_seurat_clusters.pdf", sep = "")), width = width, height = height)
+            pdf(file = file.path(pdf_dir, paste(label, "umap_seurat_clusters.pdf", sep = "")), 
+                width = width / 2, height = height / 2)
             print(q_c)
             dev.off()
 
             png(file.path(img_dir, paste(label, "umap_perturbations.png", sep = "")), 
-                width = width, height = height, unit = "in", res = png_res)
+                width = width / 2, height = height / 2, unit = "in", res = png_res)
             print(q_p)
             dev.off()
 
             png(file.path(img_dir, paste(label, "umap_seurat_clusters.png", sep = "")), 
-                width = width, height = height, unit = "in", res = png_res)
+                width = width / 2, height = height / 2, unit = "in", res = png_res)
             print(q_c)
             dev.off()
         }

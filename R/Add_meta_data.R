@@ -1,4 +1,4 @@
-#' Add Meta Data Information onto a SeuratObject
+#' Add Metadata Information onto a SeuratObject
 #'
 #' Add sgRNA information, mitochondrial gene percentage and replicate information onto a SeuratObject.
 #'
@@ -6,7 +6,7 @@
 #' @param mtx SeuratObject or directory to rds file of SeuratObject, with cell in columns and features in rows.
 #' @param cal.mt Logical, calculate mitochondrial gene percentage or not. Default is \code{TRUE}.
 #' @param species Only support "Hs" and "Mm", if input other species, \code{percent.mt} will be count as "Mm". Default is "Hs".
-#' @param replicate Directory of a txt file or a vector only containg the replicate information of each cell, in the same order of cells in SeuratObject. If no replicate information, we will consider that all cells are from the same replicate, and this parameter will be set as 1. Default is 1.
+#' @param replicate Directory of a txt file or a vector only contains the replicate information of each cell, in the same order of cells in SeuratObject. If no replicate information, we will consider that all cells are from the same replicate, and this parameter will be set as 1. Default is 1.
 #' 
 #' @importFrom utils read.table write.table
 #' @importFrom plyr count

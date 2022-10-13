@@ -4,7 +4,7 @@
 <img src="image/workflow.png" width="700" height="500"></img>
 
 ## Document
-We are hosting SCREEN documentation, instruction and tutorials at <a href="https://hailinwei98.github.io/SCREEN.html">SCREEN Website</a>.
+We are hosting SCREEN documentation, instruction and tutorials at <a href="https://hailinwei98.github.io/SCREE.html">SCREEN Website</a>.
 
 ## Dependency
 	R >= 4.0.3

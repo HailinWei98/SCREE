@@ -2,7 +2,7 @@
 % Please edit documentation in R/Add_meta_data.R
 \name{Add_meta_data}
 \alias{Add_meta_data}
-\title{Add Meta Data Information onto a SeuratObject}
+\title{Add Metadata Information onto a SeuratObject}
 \usage{
 Add_meta_data(sg_lib, mtx, cal.mt = TRUE, species = "Hs", replicate = 1)
 }
@@ -15,7 +15,7 @@ Add_meta_data(sg_lib, mtx, cal.mt = TRUE, species = "Hs", replicate = 1)
 
 \item{species}{Only support "Hs" and "Mm", if input other species, \code{percent.mt} will be count as "Mm". Default is "Hs".}
 
-\item{replicate}{Directory of a txt file or a vector only containg the replicate information of each cell, in the same order of cells in SeuratObject. If no replicate information, we will consider that all cells are from the same replicate, and this parameter will be set as 1. Default is 1.}
+\item{replicate}{Directory of a txt file or a vector only contains the replicate information of each cell, in the same order of cells in SeuratObject. If no replicate information, we will consider that all cells are from the same replicate, and this parameter will be set as 1. Default is 1.}
 }
 \description{
 Add sgRNA information, mitochondrial gene percentage and replicate information onto a SeuratObject.

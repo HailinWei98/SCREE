@@ -7,6 +7,7 @@
 GOenrichment(
   score,
   pval,
+  selected = NULL,
   score_cut = 0.2,
   pval_cut = 0.05,
   DE_gene_to_use = "all",
@@ -33,6 +34,8 @@ GOenrichment(
 \item{score}{Data frame or directory of score from \code{improved_scmageck_lr}, genes in rows and perturbations in columns.}
 
 \item{pval}{Data frame or directory of p_value from \code{improved_scmageck_lr}, genes in rows and perturbations in columns.}
+
+\item{selected}{Perturbation to visualize. Default is NULL, all perturbations will be chosen.}
 
 \item{score_cut}{Score cutoff of \code{improved_scmageck_lr} results. Default is 0.2.}
 

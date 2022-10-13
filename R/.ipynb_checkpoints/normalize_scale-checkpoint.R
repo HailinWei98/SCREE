@@ -6,6 +6,7 @@
 #' @param normalization.method Method for normalization, can be one of "LogNormalize", "CLR", "RC". See more details from \code{\link[Seurat]{NormalizeData}}. Default is "LogNormalize".
 #' @param scale.factor Sets the scale factor for cell-level normalization. Default is 10000.
 #' @param vars.to.regress Variables to regress out (previously latent.vars in RegressOut). Default is c("nCount_RNA", "percent.mt").
+#' @param features Vector of features names to scale/center. Default is \code{NULL}, means all features.
 #'
 #' @import Seurat
 #' @export
@@ -14,7 +15,7 @@ normalize_scale <- function(mtx, normalization.method = "LogNormalize", scale.fa
     
     #read file
     
-    if (is.character(mtx_dir)) {
+    if (is.character(mtx)) {
         message(paste("Reading RDS file:", mtx))
         perturb_QC <- readRDS(mtx)
     } else {

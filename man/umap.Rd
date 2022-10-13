@@ -29,13 +29,13 @@ umap(
   plot.save = TRUE,
   prefix = ".",
   label = "",
-  width = 7,
-  height = 7,
+  width = 3.5,
+  height = 3.5,
   png_res = 720
 )
 }
 \arguments{
-\item{mtx}{SeuratObject or directory to rds file of SeuratObject, with cell in columns and features in rows. Note that the dataset has to be normalized and scaled, and need a sgRNA information column named "perturbations" in the meta data.}
+\item{mtx}{SeuratObject or directory to rds file of SeuratObject, with cell in columns and features in rows. Note that the dataset has to be normalized and scaled, and need a sgRNA information column named "perturbations" in the metadata.}
 
 \item{assays}{Assay to use. Default is "RNA".}
 
@@ -83,9 +83,9 @@ umap(
 
 \item{label}{The prefix label of the output file. Notably, there needs a separator between default file names and the label, so label would be better to be like "label_". Default is "".}
 
-\item{width}{Width of the graphics region of the pdf file in inches, for both png and pdf format. Default is 7.}
+\item{width}{Width of the graphics region of the pdf file in inches, for both png and pdf format. Default is 3.5.}
 
-\item{height}{Height of the graphics region of the pdf file in inches, for both png and pdf format. Default is 7.}
+\item{height}{Height of the graphics region of the pdf file in inches, for both png and pdf format. Default is 3.5.}
 
 \item{png_res}{The nominal resolution in ppi of png file. Higher png_res indicates a bigger and more clear png file. Default is 720.}
 }

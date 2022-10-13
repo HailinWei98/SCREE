@@ -4,6 +4,7 @@
 #'
 #' @param score Data frame or directory of score from \code{improved_scmageck_lr}, genes in rows and perturbations in columns.
 #' @param pval Data frame or directory of p_value from \code{improved_scmageck_lr}, genes in rows and perturbations in columns.
+#' @param selected Perturbation to visualize. Default is NULL, all perturbations will be chosen.
 #' @param score_cut Score cutoff of \code{improved_scmageck_lr} results. Default is 0.2.
 #' @param pval_cut P-value cutoff of \code{improved_scmageck_lr} results. Default is 0.05.
 #' @param DE_gene_to_use Differential gene set to use, can be one of "all" (all potential target genes), "up" (potential target genes with positive score), "down" (potential target genes with negative score). Default is "all".
@@ -28,13 +29,11 @@
 #' @importFrom grDevices colorRampPalette dev.off pdf png
 #' @importFrom utils read.table write.table
 #' @importFrom clusterProfiler enrichGO slice
-#' @import org.Hs.eg.db
-#' @import org.Mm.eg.db
 #' @import ggplot2
 #' @import stringr
 #' @export
 
-GOenrichment <- function(score, pval, score_cut = 0.2, pval_cut = 0.05, DE_gene_to_use = "all", database = "org.Hs.eg.db", gene_type = "Symbol", showCategory = 10, wrap_width = 150, title.size = 25, legend.text.size = 12, legend.title.size = 18, x.text.size = 12, x.title.size = 20, y.text.size = 12, y.title.size = 20, plot.save = TRUE, prefix = ".", label = "", width = 12, height = 8, png_res = 720){
+GOenrichment <- function(score, pval, selected = NULL, score_cut = 0.2, pval_cut = 0.05, DE_gene_to_use = "all", database = "org.Hs.eg.db", gene_type = "Symbol", showCategory = 10, wrap_width = 150, title.size = 25, legend.text.size = 12, legend.title.size = 18, x.text.size = 12, x.title.size = 20, y.text.size = 12, y.title.size = 20, plot.save = TRUE, prefix = ".", label = "", width = 12, height = 8, png_res = 720){
     
     #get score and p_val
     
@@ -42,7 +41,7 @@ GOenrichment <- function(score, pval, score_cut = 0.2, pval_cut = 0.05, DE_gene_
         score <- read.table(score, header = T, row.names = 1)
     }
     
-    if (is.character(pval_dir)) {
+    if (is.character(pval)) {
         pval <- read.table(pval, header = T, row.names = 1)
     }
     
@@ -68,7 +67,7 @@ GOenrichment <- function(score, pval, score_cut = 0.2, pval_cut = 0.05, DE_gene_
             dir.create(path = dir)
         }
         
-        pdf_dir <- file.path(dir, "GO")
+        pdf_dir <- file.path(dir, "pdf")
         if (!(dir.exists(pdf_dir))) {
             dir.create(path = pdf_dir)
         }
@@ -90,7 +89,10 @@ GOenrichment <- function(score, pval, score_cut = 0.2, pval_cut = 0.05, DE_gene_
         stop("gene_type must be one of c('Symbol', 'Ensembl')")
     }
     
-    for (gene in colnames(score)) {
+    if (is.null(selected)) {
+        selected <- colnames(score)
+    }
+    for (gene in selected) {
         
         #get score and p_val for each perturbation
         

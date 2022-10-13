@@ -12,7 +12,8 @@ sgRNAassign(
   freq_percent = 0.8,
   freq = "freq",
   cell = "cell",
-  barcode = "barcode"
+  barcode = "barcode",
+  unique = FALSE
 )
 }
 \arguments{
@@ -31,6 +32,8 @@ sgRNAassign(
 \item{cell}{Name of the "cell" column, only used for "DataFrame" type. Default is \code{"cell"}.}
 
 \item{barcode}{Name of the "barcode" column, only used for "DataFrame" type. Default is \code{"barcode"}.}
+
+\item{unique}{Logical, only retain cells with the top target that passed the \code{freq_percent} or not. Default is \code{FALSE}.}
 }
 \description{
 Assign sgRNAs to cells based on sgRNA count matrix or data frame includes sgRNA counts in each cell.

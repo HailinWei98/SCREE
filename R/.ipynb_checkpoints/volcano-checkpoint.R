@@ -73,7 +73,7 @@ volcano <- function(score, pval, selected = NULL, pval_cut = 0.05, score_cut = 0
             dir.create(path = pdf_dir)
         }
 
-        img_dir <- file.path(prefix, "img")
+        img_dir <- file.path(dir, "img")
         if (!(dir.exists(img_dir))) {
             dir.create(path = img_dir)
         }
@@ -168,7 +168,7 @@ volcano <- function(score, pval, selected = NULL, pval_cut = 0.05, score_cut = 0
         results[[j]] <- p1
         names(results)[j] <- i
         if (plot.save == TRUE) {
-            pdf(file = file.path(dir, paste(i, ".pdf", sep = "")), width = width, height = height)
+            pdf(file = file.path(pdf_dir, paste(i, ".pdf", sep = "")), width = width, height = height)
             print(p1)
             dev.off()
 

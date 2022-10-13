@@ -15,6 +15,7 @@ sgRNA_quality_plot(
   y.text.size = 16,
   y.title.size = 20,
   label.size = 6,
+  bar_width = NULL,
   plot.save = TRUE,
   prefix = ".",
   label = "",
@@ -43,6 +44,8 @@ sgRNA_quality_plot(
 \item{y.title.size}{Numeric, y-axis title size of the plot. Default is 20.}
 
 \item{label.size}{Label size of the the barplot.}
+
+\item{bar_width}{Bar width. Default is \code{NULL}, set to 90\% of the resolution of the data.}
 
 \item{plot.save}{Logical, save plots or not. Default is \code{TRUE}.}
 

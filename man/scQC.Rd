@@ -8,7 +8,7 @@ scQC(
   mtx,
   species = "Hs",
   gene_frac = 0.01,
-  nFeature = c(200, 5000),
+  nFeature = c(200, 50000),
   nCount = 1000,
   mt = 10,
   blank_NTC = FALSE,
@@ -34,7 +34,7 @@ scQC(
 
 \item{gene_frac}{A paramter for filtering low expressed genes. By default, only genes that have expressions or counts in at least that fractions of cells are kept. Default is 0.01.}
 
-\item{nFeature}{Limitation of detected feature numbers in each cell, in the format like c(200, 500000). Default is c(200, 500000). If you don't need an upper limit, you can set the upper limit to an extremely large number.}
+\item{nFeature}{Limitation of detected feature numbers in each cell, in the format like c(200, 50000). Default is c(200, 50000). If you don't need an upper limit, you can set the upper limit to an extremely large number.}
 
 \item{nCount}{Minimal count numbers in each cell. Default is 1000.}
 

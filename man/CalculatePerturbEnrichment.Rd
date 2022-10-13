@@ -20,13 +20,13 @@ CalculatePerturbEnrichment(
   plot.save = TRUE,
   prefix = ".",
   label = "",
-  width = 10,
-  height = 8,
+  width = "auto",
+  height = "auto",
   png_res = 720
 )
 }
 \arguments{
-\item{mtx}{SeuratObject or directory to rds file of SeuratObject, with cell in columns and features in rows. Note that the dataset has to be normalized and scaled, and need a sgRNA information column named "perturbations" in the meta data.}
+\item{mtx}{SeuratObject or directory to rds file of SeuratObject, with cell in columns and features in rows. Note that the dataset has to be normalized and scaled, and need a sgRNA information column named "perturbations" in the metadata.}
 
 \item{sg_lib}{Data frame or directory to a txt file containing 3 columns: cell, barcode, gene. If sgRNA information stored in a matrix-like format or input data frame only has sgRNA frequency of each cell, use \code{\link[SCREE]{sgRNAassign}} to assign sgRNA to each cell.}
 
@@ -56,9 +56,9 @@ CalculatePerturbEnrichment(
 
 \item{label}{The prefix label of the output file. Notably, there needs a separator between default file names and the label, so label would be better to be like "label_". Default is "".}
 
-\item{width}{Width of the graphics region of the pdf file in inches, for both png and pdf format. Default is 10.}
+\item{width}{Width of the graphics region of the pdf file in inches, for both png and pdf format. Default is "atuo", according to the cellwidth unless cellwidth is \code{NA}. If cellwidth is \code{NA} or legend.title is \code{TRUE} and width is "auto", the width will be set to 10.}
 
-\item{height}{Height of the graphics region of the pdf file in inches, for both png and pdf format. Default is 8.}
+\item{height}{Height of the graphics region of the pdf file in inches, for both png and pdf format. Default is "atuo", according to the cellheight unless cellheight is \code{NA}. If cellheight is \code{NA} or legend.title is \code{TRUE} and height is "auto", the height will be set to 8.}
 
 \item{png_res}{The nominal resolution in ppi of png file. Higher png_res indicates a bigger and more clear png file. Default is 720.}
 }

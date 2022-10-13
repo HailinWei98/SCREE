@@ -13,7 +13,7 @@ ATAC_Add_meta_data(sg_lib, mtx, fragments, replicate = 1, cal.FRiP = TRUE)
 
 \item{fragments}{Directory of fragments file.}
 
-\item{replicate}{Directory of a txt file or a vector only containg the replicate information of each cell, in the same order of cells in SeuratObject. If no replicate information, we will consider that all cells are from the same replicate, and this parameter will be set as 1. Default is 1.}
+\item{replicate}{Directory of a txt file or a vector only contains the replicate information of each cell, in the same order of cells in SeuratObject. If no replicate information, we will consider that all cells are from the same replicate, and this parameter will be set as 1. Default is 1.}
 
 \item{cal.FRiP}{Logical, calculate FRiP or not. Default is \code{TRUE}.}
 }

@@ -1,0 +1,10 @@
+setup.py
+SCREE/SCREE
+SCREE/__init__.py
+SCREE/analysis.R
+SCREE/bin.R
+SCREE.egg-info/PKG-INFO
+SCREE.egg-info/SOURCES.txt
+SCREE.egg-info/dependency_links.txt
+SCREE.egg-info/requires.txt
+SCREE.egg-info/top_level.txt

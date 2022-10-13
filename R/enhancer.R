@@ -27,11 +27,6 @@
 #' @importFrom utils read.table write.table
 #' @importFrom grDevices colorRampPalette dev.off pdf png
 #' @importFrom ensembldb genes
-#' @import EnsDb.Hsapiens.v75
-#' @import EnsDb.Hsapiens.v79
-#' @import EnsDb.Hsapiens.v86
-#' @import EnsDb.Mmusculus.v75
-#' @import EnsDb.Mmusculus.v79
 #' @import Seurat
 #' @import ggpubr
 #' @importFrom cowplot plot_grid
@@ -254,7 +249,7 @@ EnhancerGeneExpression <- function(sg_lib, mtx, selected = NULL, species = "Hs",
             #generate html config
 
             if (html_config == TRUE) {
-                names(enhancer) <- seq(1:(ceiling(l/12)))
+                names(enhancer) <- seq(1 : (ceiling(l/12)))
                 enhancer <- paste(names(enhancer), enhancer, collapse = "\" , \"", sep = "\" : \"")
                 all_enhancer <- paste("\"enhancer\" : {\"", enhancer, "\"}", sep = "")
             }
@@ -347,7 +342,7 @@ EnhancerGeneExpression <- function(sg_lib, mtx, selected = NULL, species = "Hs",
                 #save plot
 
                 if (plot.save == TRUE) {
-                    pdf(file = file.path(dir, paste(new_perturb, ".pdf", sep = "")), 
+                    pdf(file = file.path(pdf_dir, paste(new_perturb, ".pdf", sep = "")), 
                         height = height, width = width)
                     for(i in 1:(ceiling(l/12))){
                         if(i == ceiling(l/12)) {
@@ -457,11 +452,6 @@ EnhancerGeneExpression <- function(sg_lib, mtx, selected = NULL, species = "Hs",
 #'
 #' @importFrom utils read.table write.table
 #' @importFrom ensembldb genes
-#' @import EnsDb.Hsapiens.v75
-#' @import EnsDb.Hsapiens.v79
-#' @import EnsDb.Hsapiens.v86
-#' @import EnsDb.Mmusculus.v75
-#' @import EnsDb.Mmusculus.v79
 #' @export
 
 DirectTarget <- function(score, pval, selected = NULL, species = "Hs", version = "v75", gene_annotations = NULL, upstream = 2000000, downstream = 2000000, score_cut = 0.2, pval_cut = 0.05, table.save = TRUE, prefix = ".", label = "") {

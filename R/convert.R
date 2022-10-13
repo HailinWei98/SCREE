@@ -10,12 +10,13 @@
 #' @param freq Name of the "freq" column, only used for "DataFrame" type. Default is \code{"freq"}.
 #' @param cell Name of the "cell" column, only used for "DataFrame" type. Default is \code{"cell"}.
 #' @param barcode Name of the "barcode" column, only used for "DataFrame" type. Default is \code{"barcode"}.
+#' @param unique Logical, only retain cells with the top target that passed the \code{freq_percent} or not. Default is \code{FALSE}.
 #' 
 #' @import reshape2
 #' @importFrom utils read.table write.table
 #' @export
 
-sgRNAassign <- function(sg_lib, type = "CountMatrix", row_names = FALSE, freq_cut = 20, freq_percent = 0.8, freq = "freq", cell = "cell", barcode = "barcode"){
+sgRNAassign <- function(sg_lib, type = "CountMatrix", row_names = FALSE, freq_cut = 20, freq_percent = 0.8, freq = "freq", cell = "cell", barcode = "barcode", unique = FALSE){
     
     #get sg_lib
     
@@ -53,7 +54,12 @@ sgRNAassign <- function(sg_lib, type = "CountMatrix", row_names = FALSE, freq_cu
         b <- subset(a2, count > freq_percent)
         c <- subset(a2, !(cell %in% b$cell))
         c <- subset(c, count > 0)
-        sg_lib <- rbind(b[, c("cell", "sgRNA")], c[, c("cell", "sgRNA")])
+        if (unique == TRUE) {
+            sg_lib <- b[, c("cell", "sgRNA")]
+        } else {
+            sg_lib <- rbind(b[, c("cell", "sgRNA")], c[, c("cell", "sgRNA")])
+        }
+        
 
         sg_lib$gene <- gsub("_.*\\b", "", sg_lib$sgRNA)
         colnames(sg_lib) <- c("cell", "barcode", "gene")
@@ -63,9 +69,9 @@ sgRNAassign <- function(sg_lib, type = "CountMatrix", row_names = FALSE, freq_cu
             stop("freq, barcode, or cell column names not found in input sgRNA library.")
         }
         new_lib <- data.frame(cell = sg_lib[, cell], barcode = sg_lib[, barcode], freq = sg_lib[, freq])
-        a <- subset(new_lib, freq > freq_cut)
+        a <- subset(new_lib, freq >= freq_cut)
         
-        b <- a$cellBC[duplicated(a$cell)]
+        b <- a$cell[duplicated(a$cell)]
 
         c <- subset(a, cell %in% b)
 
@@ -73,15 +79,19 @@ sgRNAassign <- function(sg_lib, type = "CountMatrix", row_names = FALSE, freq_cu
 
         e <- data.frame()
         
-        for(i in unique(c$cell)){
+        for (i in unique(c$cell)) {
             test <- subset(c, cell == i)
             test$freq <- test$freq / sum(test$freq)
-            if(max(test$freq) >= freq_percent){
+            if (max(test$freq) >= freq_percent) {
                 test <- subset(test, freq >= freq_percent)
             }
-            e <- rbind(test[, c("cell", "barcode")], e)
+            e <- rbind(test, e)
+            
         }
-        sg_lib <- rbind(e, d[, c("cell", "barcode")])
+        if (unique == TRUE) {
+            e <- subset(e, freq >= freq_percent)
+        }
+        sg_lib <- rbind(e[, c("cell", "barcode")], d[, c("cell", "barcode")])
         sg_lib$gene <- gsub("_.*\\b", "", sg_lib$barcode)
         colnames(sg_lib) <- c("cell", "barcode", "gene")
     } else {

@@ -26,7 +26,8 @@ config_generation(
   pval_cut = 0.05,
   DA = NULL,
   cicero = NULL,
-  enhancer = NULL
+  enhancer = NULL,
+  base64 = FALSE
 )
 }
 \arguments{
@@ -58,7 +59,7 @@ config_generation(
 
 \item{data}{Data source.}
 
-\item{article_name}{Name of the article}
+\item{article_name}{Name of the article.}
 
 \item{data_name}{Name of the data.}
 

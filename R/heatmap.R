@@ -19,8 +19,8 @@
 #' @param plot.save Logical, save plots or not. Default is \code{TRUE}. 
 #' @param prefix Path to save the plots. Default is current directory.
 #' @param label The prefix label of the output file. Notably, there needs a separator between default file names and the label, so label would be better to be like "label_". Default is "".
-#' @param width Width of the graphics region of the pdf file in inches, for both png and pdf format. Default is 10.
-#' @param height Height of the graphics region of the pdf file in inches, for both png and pdf format. Default is 8.
+#' @param width Width of the graphics region of the pdf file in inches, for both png and pdf format. Default is "atuo", according to the cellwidth unless cellwidth is \code{NA}. If cellwidth is \code{NA} or legend.title is \code{TRUE} and width is "auto", the width will be set to 10.
+#' @param height Height of the graphics region of the pdf file in inches, for both png and pdf format. Default is "atuo", according to the cellheight unless cellheight is \code{NA}. If cellheight is \code{NA} or legend.title is \code{TRUE} and height is "auto", the height will be set to 8.
 #' @param png_res The nominal resolution in ppi of png file. Higher png_res indicates a bigger and more clear png file. Default is 720.
 #'
 #' @importFrom grDevices colorRampPalette dev.off pdf png
@@ -32,7 +32,7 @@
 #' @import ggplotify
 #' @export
 
-heatmap <- function(score, pval, score_cut = 0.2, pval_cut = 0.05, NTC = "NegCtrl", remove_neg = TRUE, num = 0, min.filtered.gene = 3, method = "pearson", color = c("#4DBBD5FF", "white", "#E64B35FF"), cell = "auto", fontsize = "auto", angle = 90, legend.title = FALSE, plot.save = TRUE, prefix= ".", label = "", width = 10, height = 8, png_res = 720) {
+heatmap <- function(score, pval, score_cut = 0.2, pval_cut = 0.05, NTC = "NegCtrl", remove_neg = TRUE, num = 0, min.filtered.gene = 3, method = "pearson", color = c("#4DBBD5FF", "white", "#E64B35FF"), cell = "auto", fontsize = "auto", angle = 90, legend.title = FALSE, plot.save = TRUE, prefix= ".", label = "", width = "auto", height = "auto", png_res = 720) {
     
     #get score and p_val
     
@@ -80,7 +80,7 @@ heatmap <- function(score, pval, score_cut = 0.2, pval_cut = 0.05, NTC = "NegCtr
             cell <- "auto"
         }
         
-        if (cell == "auto") {
+        if (!is.na(cell) & cell == "auto") {
             if (ncol(remove_neg) > 20) {
                 cellwidth = 15
                 cellheight = 15
@@ -92,6 +92,7 @@ heatmap <- function(score, pval, score_cut = 0.2, pval_cut = 0.05, NTC = "NegCtr
             cellwidth = cell
             cellheight = cell
         }
+        
     } else if (length(cell) == 2) {
         if ((!is.numeric(cell[1]) & !is.na(cell[1])) | (!is.numeric(cell[2]) & !is.na(cell[2]))) {
             warning("Cell must be a numeric parameter or NA or 'auto', using 'auto' instead.")
@@ -184,6 +185,18 @@ heatmap <- function(score, pval, score_cut = 0.2, pval_cut = 0.05, NTC = "NegCtr
         file <- file.path(pdf_dir, paste(label, "correlation_heatmap.pdf", sep = ""))
         img_file <- file.path(img_dir, paste(label, "correlation_heatmap.png", sep = ""))
         
+        if (!is.na(cellwidth) & legend.title == FALSE & width == "auto") {
+            width <- cellwidth * ncol(remove_neg) / 72 + 2.5
+        } else if ((is.na(cellwidth) | legend.title == TRUE) & width == "auto") {
+            width <- 10
+        }
+        
+        if (!is.na(cellheight) & legend.title == FALSE & height == "auto") {
+            height <- cellheight * ncol(remove_neg) / 72 + 1.5
+        } else if ((is.na(cellheight) | legend.title == TRUE) & height == "auto") {
+            height <- 8
+        }
+
         pdf(file, width = width, height = height)
         print(p)
         dev.off()

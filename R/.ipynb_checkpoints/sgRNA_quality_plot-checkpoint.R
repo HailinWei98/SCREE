@@ -12,6 +12,7 @@
 #' @param y.text.size Numeric, y-axis text size of the plot. Default is 16.
 #' @param y.title.size Numeric, y-axis title size of the plot. Default is 20.
 #' @param label.size Label size of the the barplot.
+#' @param bar_width Bar width. Default is \code{NULL}, set to 90% of the resolution of the data.
 #' @param plot.save Logical, save plots or not. Default is \code{TRUE}. 
 #' @param prefix Path to save the plots. Default is current directory.
 #' @param label The prefix label of the output file. Notably, there needs a separator between default file names and the label, so label would be better to be like "label_". Default is "".
@@ -27,7 +28,7 @@
 #' @import ggsci
 #' @export
 
-sgRNA_quality_plot <- function(mtx, sg_lib, title.size = 25, legend.text.size = 12, legend.title.size = 18, x.text.size = 16, x.title.size = 20, y.text.size = 16, y.title.size = 20, label.size = 6, plot.save = TRUE, prefix = ".", label = "", width = 8, height = 8, png_res = 720){
+sgRNA_quality_plot <- function(mtx, sg_lib, title.size = 25, legend.text.size = 12, legend.title.size = 18, x.text.size = 16, x.title.size = 20, y.text.size = 16, y.title.size = 20, label.size = 6, bar_width = NULL, plot.save = TRUE, prefix = ".", label = "", width = 8, height = 8, png_res = 720){
     
     #read files
     
@@ -88,7 +89,7 @@ sgRNA_quality_plot <- function(mtx, sg_lib, title.size = 25, legend.text.size = 
     sg_num_count$sgRNA_num <- factor(sg_num_count$sgRNA_num, levels = sg_num_count$sgRNA_num, ordered = T)
 
     g2 <- ggplot(sg_num_count,mapping = aes(x = sgRNA_num, y = freq)) +
-    geom_bar(stat = "identity",color = "black", fill = "#8491B4FF") + theme_test() + 
+    geom_bar(stat = "identity",color = "black", fill = "#8491B4FF", width = bar_width) + theme_test() + 
     labs(x = "sgRNA Numbers", y = "Cell Numbers", title = "sgRNA Numbers in Each Cell") +
     theme(plot.title = element_text(hjust = 0.5, size = title.size),
           text = element_text(hjust = 0.5, face = "bold"),

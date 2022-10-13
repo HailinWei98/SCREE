@@ -71,7 +71,7 @@ ATACciceroPlot(
 
 \item{test.use}{Denotes which test to use. Available options are: "wilcox", "bimod", "roc", "t", "negbinom", "poisson", "LR", "MAST", "DESeq2". See details from \code{\link[Seurat]{FindMarkers}}. Default is "wilcox".}
 
-\item{p_adj_cut}{Maximum adjust p_value to . Default is 0.05.}
+\item{p_adj_cut}{Maximum adjust p_value. Default is 0.05.}
 
 \item{logFC_cut}{Limit testing to genes which show, on average, at least X-fold difference (log-scale) between the two groups of cells. Default is 0.25. Increasing logfc.threshold speeds up the function, but can miss weaker.}
 

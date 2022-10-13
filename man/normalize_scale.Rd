@@ -20,6 +20,8 @@ normalize_scale(
 \item{scale.factor}{Sets the scale factor for cell-level normalization. Default is 10000.}
 
 \item{vars.to.regress}{Variables to regress out (previously latent.vars in RegressOut). Default is c("nCount_RNA", "percent.mt").}
+
+\item{features}{Vector of features names to scale/center. Default is \code{NULL}, means all features.}
 }
 \description{
 Normalize and scale the raw UMI count matrix based on \code{\link{Seurat}}.

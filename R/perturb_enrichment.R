@@ -2,7 +2,7 @@
 #'
 #' Calculate enrichment ratio for each perturbation in every cluster.
 #'
-#' @param mtx SeuratObject or directory to rds file of SeuratObject, with cell in columns and features in rows. Note that the dataset has to be normalized and scaled, and need a sgRNA information column named "perturbations" in the meta data.
+#' @param mtx SeuratObject or directory to rds file of SeuratObject, with cell in columns and features in rows. Note that the dataset has to be normalized and scaled, and need a sgRNA information column named "perturbations" in the metadata.
 #' @param sg_lib Data frame or directory to a txt file containing 3 columns: cell, barcode, gene. If sgRNA information stored in a matrix-like format or input data frame only has sgRNA frequency of each cell, use \code{\link[SCREE]{sgRNAassign}} to assign sgRNA to each cell.
 #' @param NTC The name of negative controls. Default is "NTC".
 #' @param NTC.cal Logical, calculate negative control or not. Default is \code{TRUE}, which will remove cells assigned with negative control from the SeuratObject.
@@ -17,8 +17,8 @@
 #' @param plot.save Logical, save plots or not. Default is \code{TRUE}. 
 #' @param prefix Path to save the plots. Default is current directory.
 #' @param label The prefix label of the output file. Notably, there needs a separator between default file names and the label, so label would be better to be like "label_". Default is "".
-#' @param width Width of the graphics region of the pdf file in inches, for both png and pdf format. Default is 10.
-#' @param height Height of the graphics region of the pdf file in inches, for both png and pdf format. Default is 8.
+#' @param width Width of the graphics region of the pdf file in inches, for both png and pdf format. Default is "atuo", according to the cellwidth unless cellwidth is \code{NA}. If cellwidth is \code{NA} or legend.title is \code{TRUE} and width is "auto", the width will be set to 10.
+#' @param height Height of the graphics region of the pdf file in inches, for both png and pdf format. Default is "atuo", according to the cellheight unless cellheight is \code{NA}. If cellheight is \code{NA} or legend.title is \code{TRUE} and height is "auto", the height will be set to 8.
 #' @param png_res The nominal resolution in ppi of png file. Higher png_res indicates a bigger and more clear png file. Default is 720.
 #'
 #' @importFrom grDevices colorRampPalette dev.off pdf png
@@ -29,7 +29,7 @@
 #' @import gtable
 #' @export
 
-CalculatePerturbEnrichment <- function(mtx, sg_lib, NTC = "NTC", NTC.cal = TRUE, table.save = TRUE, top = NULL, range = c(0, 1), color = c("white", "coral1"), cell = c(15, 20), fontsize = 15, angle = 90, legend.title = FALSE, plot.save = TRUE, prefix= ".", label = "", width = 10, height = 8, png_res = 720){
+CalculatePerturbEnrichment <- function(mtx, sg_lib, NTC = "NTC", NTC.cal = TRUE, table.save = TRUE, top = NULL, range = c(0, 1), color = c("white", "coral1"), cell = c(15, 20), fontsize = 15, angle = 90, legend.title = FALSE, plot.save = TRUE, prefix= ".", label = "", width = "auto", height = "auto", png_res = 720){
     
     if (is.character(mtx)) {
         message(paste("Reading RDS file:", mtx))
@@ -136,7 +136,18 @@ CalculatePerturbEnrichment <- function(mtx, sg_lib, NTC = "NTC", NTC.cal = TRUE,
     }
     
     if (table.save == TRUE) {
-        write.table(cluster_pro, file = file.path(prefix, paste(label, "perturb_ratio.txt", sep = "")), quote = FALSE)
+        
+        dir <- file.path(prefix, "results")
+        if (!(dir.exists(dir))) {
+            dir.create(dir)
+        }
+
+        dir <- file.path(dir, "perturbation_efficiency")
+        if (!(dir.exists(dir))) {
+            dir.create(dir)
+        }
+        
+        write.table(cluster_pro, file = file.path(dir, paste(label, "perturb_ratio.txt", sep = "")), quote = FALSE)
     }
     
     if (legend.title == TRUE) {
@@ -169,7 +180,7 @@ CalculatePerturbEnrichment <- function(mtx, sg_lib, NTC = "NTC", NTC.cal = TRUE,
         gtable <- gtable::gtable_add_grob(gtable,xlab.grob,5, 3)
         gtable <- gtable::gtable_add_grob(gtable,ylab.grob,4, 4)
         gtable <- gtable::gtable_add_grob(gtable,legend.grob2, 4, 5)
-        p <- ggplotify::as.ggplot(gtable)
+        p1 <- ggplotify::as.ggplot(gtable)
 
     }
     
@@ -190,12 +201,12 @@ CalculatePerturbEnrichment <- function(mtx, sg_lib, NTC = "NTC", NTC.cal = TRUE,
             dir.create(pdf_dir)
         }
         
-        img_dir <- file.path(prefix, "img")
+        img_dir <- file.path(dir, "img")
         if (!(dir.exists(img_dir))) {
             dir.create(img_dir)
         }
         
-        file <- file.path(dir, paste(label, "perturb_ratio.pdf", sep = ""))
+        file <- file.path(pdf_dir, paste(label, "perturb_ratio.pdf", sep = ""))
         img_file <- file.path(img_dir, paste(label, "perturb_ratio.png", sep = ""))
         # if (ncol(cluster_pro_plot) > 20) {
         #     if (nrow(cluster_pro_plot) > 20) {
@@ -224,11 +235,23 @@ CalculatePerturbEnrichment <- function(mtx, sg_lib, NTC = "NTC", NTC.cal = TRUE,
         #          show_colnames = T, fontsize = size, 
         #          cellwidth = cellwidth, cellheight = cellheight, filename = img_file)
         
+        if (!is.na(cellwidth) & legend.title == FALSE & width == "auto") {
+            width <- cellwidth * ncol(cluster_pro_plot) / 72 + 2.5
+        } else if ((is.na(cellwidth) | legend.title == TRUE) & width == "auto") {
+            width <- 10
+        }
+        
+        if (!is.na(cellheight) & legend.title == FALSE & height == "auto") {
+            height <- cellheight * nrow(cluster_pro_plot) / 72 + max(stringr::str_length(colnames(cluster_pro_plot))) / 10 + 1
+        } else if ((is.na(cellheight) | legend.title == TRUE) & height == "auto") {
+            height <- 8
+        }
+
         pdf(file, width = width, height = height)
-        print(p)
+        print(p1)
         dev.off()
         png(img_file, width = width, height = height, unit = "in", res = png_res)
-        print(p)
+        print(p1)
         dev.off()
     }
     

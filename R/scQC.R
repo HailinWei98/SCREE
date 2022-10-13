@@ -5,7 +5,7 @@
 #' @param mtx SeuratObject or directory to rds file of SeuratObject, with cell in columns and features in rows.
 #' @param species Species used to calculate mitochondrial gene percentage, only support "Hs" and "Mm". Default is "Hs".
 #' @param gene_frac A paramter for filtering low expressed genes. By default, only genes that have expressions or counts in at least that fractions of cells are kept. Default is 0.01.
-#' @param nFeature Limitation of detected feature numbers in each cell, in the format like c(200, 500000). Default is c(200, 500000). If you don't need an upper limit, you can set the upper limit to an extremely large number. 
+#' @param nFeature Limitation of detected feature numbers in each cell, in the format like c(200, 50000). Default is c(200, 50000). If you don't need an upper limit, you can set the upper limit to an extremely large number. 
 #' @param nCount Minimal count numbers in each cell. Default is 1000.
 #' @param mt Maximum mitochondrial gene percentage of each cell. Default is 10 (means 10%).
 #' @param blank_NTC Logical, use blank control as negative control or not. Default is \code{FALSE}.
@@ -29,7 +29,7 @@
 #' @import ggplot2
 #' @export
 
-scQC<- function(mtx, species = "Hs", gene_frac = 0.01, nFeature = c(200, 5000), nCount = 1000, mt = 10, blank_NTC = FALSE, title.size = 20, x.text.size = 15, x.title.size = 15, y.text.size = 20, pt.size = 0.1, raster = FALSE, plot.show = FALSE, plot.save = TRUE, prefix = ".", label = "", width = 8.3, height = 8, png_res = 720){
+scQC <- function(mtx, species = "Hs", gene_frac = 0.01, nFeature = c(200, 50000), nCount = 1000, mt = 10, blank_NTC = FALSE, title.size = 20, x.text.size = 15, x.title.size = 15, y.text.size = 20, pt.size = 0.1, raster = FALSE, plot.show = FALSE, plot.save = TRUE, prefix = ".", label = "", width = 8.3, height = 8, png_res = 720){
     
     #read file
     
@@ -41,11 +41,11 @@ scQC<- function(mtx, species = "Hs", gene_frac = 0.01, nFeature = c(200, 5000), 
     }
 
     if (!("replicate" %in% colnames(perturb@meta.data) & "perturbations" %in% colnames(perturb@meta.data))) {
-        stop("Cannot find meta data named 'replicate' or 'perturbations' in input matrix.")
+        stop("Cannot find metadata named 'replicate' or 'perturbations' in input matrix.")
     }
     
     if (!("percent.mt" %in% colnames(perturb@meta.data))) {
-        warning("No meta data named 'percent.mt', we will set the 'percent.mt' of each cell to 0")
+        warning("No metadata named 'percent.mt', we will set the 'percent.mt' of each cell to 0")
         perturb$percent.mt <- 0
     }
     
@@ -85,8 +85,8 @@ scQC<- function(mtx, species = "Hs", gene_frac = 0.01, nFeature = c(200, 5000), 
         }
     }
     
-    perturb_QC@active.ident <- as.factor(perturb$orig.ident)
-    
+    perturb_QC@active.ident <- as.factor(perturb[, colnames(perturb_QC)]$orig.ident)
+    perturb@active.ident <- as.factor(perturb$orig.ident)
     #QC plot of the single cell matrix
     
     #plot vlnplot with raster parameter
@@ -113,13 +113,13 @@ scQC<- function(mtx, species = "Hs", gene_frac = 0.01, nFeature = c(200, 5000), 
     custom_theme
     
     p2 <- ggplot(data = a, mapping = aes(x = Identity, y = nCount_RNA)) + 
-    geom_violin(aes(fill=factor(Identity))) + theme_classic() + 
+    geom_violin(aes(fill = factor(Identity))) + theme_classic() + 
     NoLegend() + 
     labs(x = "Identity",y = NULL, title = "nCount_RNA") + 
     custom_theme
     
     p3 <- ggplot(data = a, mapping = aes(x = Identity, y = percent.mt)) + 
-    geom_violin(aes(fill=factor(Identity))) + theme_classic() + 
+    geom_violin(aes(fill = factor(Identity))) + theme_classic() + 
     NoLegend() + 
     labs(x = "Identity",y = NULL, title = "percent.mt") + 
     custom_theme
@@ -133,15 +133,15 @@ scQC<- function(mtx, species = "Hs", gene_frac = 0.01, nFeature = c(200, 5000), 
     NoLegend() + 
     labs(x = "Identity",y = NULL, title = "nFeature_RNA") + 
     custom_theme
-    
+
     q2 <- ggplot(data = a, mapping = aes(x = Identity, y = nCount_RNA)) + 
-    geom_violin(aes(fill=factor(Identity))) + theme_classic() + 
+    geom_violin(aes(fill = factor(Identity))) + theme_classic() + 
     NoLegend() + 
     labs(x = "Identity",y = NULL, title = "nCount_RNA") + 
     custom_theme
     
     q3 <- ggplot(data = a, mapping = aes(x = Identity, y = percent.mt)) + 
-    geom_violin(aes(fill=factor(Identity))) + theme_classic() + 
+    geom_violin(aes(fill = factor(Identity))) + theme_classic() + 
     NoLegend() + 
     labs(x = "Identity",y = NULL, title = "percent.mt") + 
     custom_theme
@@ -149,17 +149,18 @@ scQC<- function(mtx, species = "Hs", gene_frac = 0.01, nFeature = c(200, 5000), 
     if (raster == TRUE) {
         p1 <- p1 + ggrastr::geom_jitter_rast(size = pt.size, raster.dpi = getOption("ggrastr.default.dpi", 300))
         p2 <- p2 + ggrastr::geom_jitter_rast(size = pt.size, raster.dpi = getOption("ggrastr.default.dpi", 300))
-        p3 <- p3 + ggrastr::geom_jitter_rast(size = pt.size, raster.dpi = getOption("ggrastr.default.dpi", 300))
+        p3 <- p3 + ggrastr::geom_jitter_rast(size = pt.size, height = 0, raster.dpi = getOption("ggrastr.default.dpi", 300))
         q1 <- q1 + ggrastr::geom_jitter_rast(size = pt.size, raster.dpi = getOption("ggrastr.default.dpi", 300))
         q2 <- q2 + ggrastr::geom_jitter_rast(size = pt.size, raster.dpi = getOption("ggrastr.default.dpi", 300))
-        q3 <- q3 + ggrastr::geom_jitter_rast(size = pt.size, raster.dpi = getOption("ggrastr.default.dpi", 300))
+        q3 <- q3 + ggrastr::geom_jitter_rast(size = pt.size, height = 0, raster.dpi = getOption("ggrastr.default.dpi", 300))
+        
     } else {
         p1 <- p1 + geom_jitter(size = pt.size)
         p2 <- p2 + geom_jitter(size = pt.size)
-        p3 <- p3 + geom_jitter(size = pt.size)
+        p3 <- p3 + geom_jitter(size = pt.size, height = 0)
         q1 <- q1 + geom_jitter(size = pt.size)
         q2 <- q2 + geom_jitter(size = pt.size)
-        q3 <- q3 + geom_jitter(size = pt.size)
+        q3 <- q3 + geom_jitter(size = pt.size, height = 0)
     }
     
     p <- cowplot::plot_grid(p1, p2, p3, ncol = 3, align = "h")
