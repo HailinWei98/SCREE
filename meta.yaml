@@ -15,30 +15,67 @@ requirements:
     - setuptools
     - r-base >=4.0.3
     - r-devtools
+    - r-seurat >=4.0.3
+    - r-ggplot2
+    - r-patchwork
+    - r-plyr
+    - r-stringr
+    - r-ggpubr
+    - bioconductor-gviz
+    - bioconductor-clusterProfiler
+    - r-reshape2
+    - r-scales
+    - r-cowplot
+    - r-gridextra
+    - r-gtable
+    - r-ggrepel
+    - r-xml2
+    - bioconductor-EnsDb.Hsapiens.v75
+    - bioconductor-EnsDb.Hsapiens.v79
+    - bioconductor-EnsDb.Hsapiens.v86
+    - bioconductor-EnsDb.Mmusculus.v75
+    - bioconductor-EnsDb.Mmusculus.v79
+    - bioconductor-ensembldb
+    - bioconductor-genomeinfodb
+    - bioconductor-iranges
+    - r-ggplotify
+    - r-Signac
+    - r-ggsci
+    - r-pheatmap
+    - r-psych
+    - r-ggrastr
   run:
     - python >=3
     - r-base >=4.0.3
-    # - r-seurat >=4.0.3
-    # - r-ggplot2
-    # - bioconductor-gviz
-    # - bioconductor-clusterProfiler
-    # - r-reshape2
-    # - r-scales
-    # - r-cowplot
-    # - r-gridextra
-    # - r-gtable
-    # - r-ggrepel
-    # - bioconductor-EnsDb.Hsapiens.v75
-    # - bioconductor-EnsDb.Hsapiens.v79
-    # - bioconductor-EnsDb.Hsapiens.v86
-    # - bioconductor-EnsDb.Mmusculus.v75
-    # - bioconductor-EnsDb.Mmusculus.v79
-    # - bioconductor-ensembldb
-    # - r-ggplotify
-    # - r-Signac
-    # - r-ggsci
-    # - r-pheatmap
-    # - r-psych
+    - r-seurat >=4.0.3
+    - r-ggplot2
+    - r-patchwork
+    - r-plyr
+    - r-stringr
+    - r-ggpubr
+    - bioconductor-gviz
+    - bioconductor-clusterProfiler
+    - r-reshape2
+    - r-scales
+    - r-cowplot
+    - r-gridextra
+    - r-gtable
+    - r-ggrepel
+    - r-xml2
+    - bioconductor-EnsDb.Hsapiens.v75
+    - bioconductor-EnsDb.Hsapiens.v79
+    - bioconductor-EnsDb.Hsapiens.v86
+    - bioconductor-EnsDb.Mmusculus.v75
+    - bioconductor-EnsDb.Mmusculus.v79
+    - bioconductor-ensembldb
+    - bioconductor-genomeinfodb
+    - bioconductor-iranges
+    - r-ggplotify
+    - r-Signac
+    - r-ggsci
+    - r-pheatmap
+    - r-psych
+    - r-ggrastr
 
 about:
   home: https://github.com/hailinwei98/SCREE

@@ -4,7 +4,7 @@
 <img src="image/workflow.png" width="700" height="500"></img>
 
 ## Document
-We are hosting SCREEN documentation, instruction and tutorials at <a href="https://hailinwei98.github.io/SCREE.html">SCREEN Website</a>.
+We are hosting SCREEN documentation, instruction and tutorials at <a href="https://hailinwei98.github.io/SCREE.html">SCREE Website</a>.
 
 ## Dependency
 	R >= 4.0.3
@@ -15,7 +15,14 @@ We are hosting SCREEN documentation, instruction and tutorials at <a href="https
 	devtools
 
 ## Installation of SCREE
-Before installation and operation of SCREE, you should install cellranger (for scRNA-seq based data) or cellranger-atac (scATAC-seq based data) first to make sure that SCREE can perform alignment and quantification accurately.
+Before installation and operation of SCREE, you should install <a href="https://support.10xgenomics.com/single-cell-gene-expression/software/overview/welcome">cellranger</a> (for scRNA-seq based data) and <a href="https://support.10xgenomics.com/single-cell-atac/software/overview/welcome">cellranger-atac</a> (for scATAC-seq based data) first to make sure that SCREE can perform alignment and quantification accurately.
+
+	conda install -c hailinwei scree
+
+If you only need the preprocess function, you can install SCREE via the pre-process/setup.py, which will not install the depend packages.
+
+	cd SCREE/pre-process
+	python setup.py install
 
 ## Installation of R package
 	$ R
