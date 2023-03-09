@@ -1,0 +1,4 @@
+Metadata-Version: 2.1
+Name: SCREE
+Version: 0.0.4
+Summary: SCREE(Single-cell CRISPR scREen data analyses and pErturbation modeling) is a workflow for single-cell CRISPR screens data processing and analysis.

@@ -138,8 +138,8 @@ sgRNA_quality_plot <- function(mtx, sg_lib, title.size = 25, legend.text.size = 
         print(g2)
         dev.off()
 
-        dir2 <- file.path(pdf_dir, "sgRNA_quality_of_gene")
-        new_dir <- file.path(img_dir, "sgRNA_quality_of_gene")
+        dir2 <- file.path(pdf_dir, paste(label, "sgRNA_quality_of_gene", sep = ""))
+        new_dir <- file.path(img_dir, paste(label, "sgRNA_quality_of_gene", sep = ""))
         if (!(dir.exists(new_dir))) {
             dir.create(path = new_dir)
         }
@@ -153,7 +153,7 @@ sgRNA_quality_plot <- function(mtx, sg_lib, title.size = 25, legend.text.size = 
             geom_line(size = 1) + theme_test() +
             geom_point(data = subset(sg_count, gene == select_gene),
                        mapping = aes(x = order, y = freq, color = sgRNA), size = 5)+
-            labs(x = "Rank", y = "Cell Numbers", title = "Cell Numbers of sgRNA") +
+            labs(x = "Rank", y = "Cell Numbers", title = "Cell Numbers of sgRNA", fill = "sgRNA") +
             theme(plot.title = element_text(hjust = 0.5, size = title.size), 
                   legend.text = element_text(size = legend.text.size),
                   text = element_text(hjust = 0.5, face = "bold"),

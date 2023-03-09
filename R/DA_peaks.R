@@ -13,7 +13,7 @@
 #' @import Seurat
 #' @export
 
-DApeaks <- function(mtx, selected, NTC = "NTC", min.pct = 0.1, test.use = "wilcox", p_adj_cut = 0.05, logFC_cut = 0.25){
+DApeaks <- function(mtx, selected, NTC = "NTC", min.pct = 0.1, test.use = "wilcox", p_adj_cut = 0.05, logFC_cut = 0.25) {
     
     if (is.character(mtx)) {
         peak <- readRDS(mtx)
@@ -23,7 +23,7 @@ DApeaks <- function(mtx, selected, NTC = "NTC", min.pct = 0.1, test.use = "wilco
     
     #rename ident
     
-    if("perturbations" %in% colnames(peak@meta.data)){
+    if ("perturbations" %in% colnames(peak@meta.data)) {
         if(selected %in% peak$perturbations){
             peak@active.ident <- peak$perturbations
         } else {
@@ -72,7 +72,7 @@ DApeaks <- function(mtx, selected, NTC = "NTC", min.pct = 0.1, test.use = "wilco
 #'
 #' @export
 
-enhancer <- function(da_peak, gene_anno, overlap_cut, pro_up = 2000, pro_down = 0){
+enhancer <- function(da_peak, gene_anno, overlap_cut, pro_up = 2000, pro_down = 0) {
     
     #get enhancer list
         

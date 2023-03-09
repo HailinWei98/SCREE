@@ -192,7 +192,7 @@ heatmap <- function(score, pval, score_cut = 0.2, pval_cut = 0.05, NTC = "NegCtr
         }
         
         if (!is.na(cellheight) & legend.title == FALSE & height == "auto") {
-            height <- cellheight * ncol(remove_neg) / 72 + 1.5
+            height <- cellheight * ncol(remove_neg) / 72 + max(stringr::str_length(colnames(score))) / 10 + 1
         } else if ((is.na(cellheight) | legend.title == TRUE) & height == "auto") {
             height <- 8
         }

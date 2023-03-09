@@ -5,7 +5,7 @@
 #' @param sg_lib Data frame or count matrix or directory to a txt file containing information of sgRNA count in each cell. 
 #' @param type Type of input data frame, can be one of "CountMatrix" or "DataFrame". "CountMatrix" means a sgRNA count matrix similar to gene count matrix, whose rows are sgRNAs and columns are cells. "DataFrame" means a data frame includes three columns: "freq", "cell", "barcode". "freq" is sgRNA count in each cell, "barcode" is sgRNA name. Default is \code{"CountMatrix"}.
 #' @param row_names Logical, is rownames included in the txt file or not. Default is \code{FALSE}.
-#' @param freq_cut Cutoff of sgRNA count numbers. For each cell, only sgRNA with counts more than freq_cut will be retained. Default is \code{20}
+#' @param freq_cut Cutoff of sgRNA count numbers. For each cell, only sgRNA with counts more than freq_cut will be retained. Default is \code{20}.
 #' @param freq_percent Cutoff of sgRNA frequency. For each cell, only sgRNA with frequency more than freq_percent will be retained. Default is \code{0.8}.
 #' @param freq Name of the "freq" column, only used for "DataFrame" type. Default is \code{"freq"}.
 #' @param cell Name of the "cell" column, only used for "DataFrame" type. Default is \code{"cell"}.
@@ -16,7 +16,7 @@
 #' @importFrom utils read.table write.table
 #' @export
 
-sgRNAassign <- function(sg_lib, type = "CountMatrix", row_names = FALSE, freq_cut = 20, freq_percent = 0.8, freq = "freq", cell = "cell", barcode = "barcode", unique = FALSE){
+sgRNAassign <- function (sg_lib, type = "CountMatrix", row_names = FALSE, freq_cut = 20, freq_percent = 0.8, freq = "freq", cell = "cell", barcode = "barcode", unique = FALSE) {
     
     #get sg_lib
     
@@ -36,7 +36,7 @@ sgRNAassign <- function(sg_lib, type = "CountMatrix", row_names = FALSE, freq_cu
         #filter results
         
         sg_lib <- as.data.frame(sg_lib)
-        sg_lib <- sg_lib * (sg_lib > freq_cut)
+        sg_lib <- sg_lib * (sg_lib >= freq_cut)
         sg_lib2 <- as.data.frame(t(t(sg_lib) / (colSums(sg_lib) + (colSums(sg_lib) == 0))))
         
         #convert matrix
@@ -51,7 +51,8 @@ sgRNAassign <- function(sg_lib, type = "CountMatrix", row_names = FALSE, freq_cu
         
         #filter freq_percent
         
-        b <- subset(a2, count > freq_percent)
+        b <- subset(a2, count > 0)
+        b <- subset(b, count >= freq_percent)
         c <- subset(a2, !(cell %in% b$cell))
         c <- subset(c, count > 0)
         if (unique == TRUE) {

@@ -121,7 +121,7 @@ volcano <- function(score, pval, selected = NULL, pval_cut = 0.05, score_cut = 0
         if (raster == TRUE) {
             
             p1 <- ggplot(data = scmageck, 
-                         mapping = aes(x = score, y = -log10(p_val + 10e-6), colour = diff, label = lab)) + 
+                         mapping = aes(x = score, y = -log10(p_val + 10e-7), colour = diff, label = lab)) + 
             geom_point_rast(size = pt.size, raster.dpi = getOption("ggrastr.default.dpi", 300)) + 
             theme_test() + 
             labs(title = title) + 
@@ -136,7 +136,7 @@ volcano <- function(score, pval, selected = NULL, pval_cut = 0.05, score_cut = 0
             scale_color_manual(values = diff[sort(unique(scmageck$diff))]) + 
             geom_vline(xintercept = c(-score_cut, score_cut), linetype = "dotted") + 
             geom_label_repel(max.overlaps = 500, show.legend = FALSE, force = T) + 
-            guides(colour = guide_legend(title = "Difference", title.hjust = 0.5))
+            guides(colour = guide_legend(title = "Difference", title.hjust = 0.5)) + xlim(-2,2)
 
         } else {
             p1 <- ggplot(data = scmageck, 

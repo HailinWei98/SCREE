@@ -45,6 +45,14 @@ config_generation <- function(mtx, mtx_QC, sg_lib, score, pval, project, prefix 
         sg_lib <- read.table(sg_lib, header = T)
     }
     
+    if (is.character(score)) {
+        score <- read.table(score, header = T, row.names = 1)
+    }
+    
+    if (is.character(pval)) {
+        pval <- read.table(pval, header = T, row.names = 1)
+    }
+    
     PerturbGene <- length(unique(sg_lib$gene)) - length(NTC)
     sg_num <- length(unique(sg_lib$barcode))
     NTC_num <- length(unique(subset(sg_lib, gene %in% NTC)))

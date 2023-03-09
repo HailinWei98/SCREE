@@ -11,7 +11,7 @@
 #' @import Signac
 #' @export
 
-ATAC_Add_meta_data <- function(sg_lib, mtx, fragments, replicate = 1, cal.FRiP = TRUE){
+ATAC_Add_meta_data <- function(sg_lib, mtx, fragments, replicate = 1, cal.FRiP = TRUE) {
     
     #Add "sgRNA_num" and "perturbations"
     
@@ -19,16 +19,16 @@ ATAC_Add_meta_data <- function(sg_lib, mtx, fragments, replicate = 1, cal.FRiP =
 
     #calculate FRiP
     
-    if(cal.FRiP == TRUE){
-        if(is.character(fragments)){
+    if (cal.FRiP == TRUE) {
+        if (is.character(fragments)) {
             frag <- CountFragments(fragments = fragments, cells = colnames(peak))
             peak$fragments <- frag$reads_count
-            peak <- FRiP(peak, total.fragments = "fragments")
-        }else{
+            peak <- FRiP(peak, DefaultAssay(peak), total.fragments = "fragments")
+        } else {
             stop("Please provide the path of fragments file")
         }
-    }else{
-        if(!("FRiP" %in% colnames(peak@meta.data))){
+    } else {
+        if (!("FRiP" %in% colnames(peak@meta.data))) {
             warning("Please make sure that there is meta data named 'FRiP' in input peak matrix while setting 'cal.FRiP = FALSE'. We will set the 'FRiP' of each cell to 1.")
             peak$FRiP <- 1
         }
@@ -79,11 +79,11 @@ ATAC_scQC <- function (mtx, chromatin.assay = FALSE, peak_frac = 0.01, nFeature 
         perturb <- mtx
     }
     
-    if(!("replicate" %in% colnames(perturb@meta.data) & "perturbations" %in% colnames(perturb@meta.data))){
+    if (!("replicate" %in% colnames(perturb@meta.data) & "perturbations" %in% colnames(perturb@meta.data))) {
         stop("Cannot find meta data names 'replicate' or 'perturbations' in input matrix.")
     }
     
-    if(!("FRiP" %in% colnames(perturb@meta.data))){
+    if (!("FRiP" %in% colnames(perturb@meta.data))) {
         warning("No meta data named 'FRiP' in input peak matrix. We will set the 'FRiP' of each cell to 1.")   
     }
     perturb$nFeature_peak <- perturb[[paste("nFeature_", perturb@active.assay, sep = "")]][, 1]
@@ -272,7 +272,7 @@ ATAC_scQC <- function (mtx, chromatin.assay = FALSE, peak_frac = 0.01, nFeature 
 #' @import Seurat
 #' @export
 
-CalculateGeneActivity <- function(mtx, fragments, species = "Hs", version = "v75", gene_type = "Symbol", protein_coding = TRUE, pro_up = 3000, pro_down = 0, sep = c("-", "-")){
+CalculateGeneActivity <- function(mtx, fragments, species = "Hs", version = "v75", gene_type = "Symbol", protein_coding = TRUE, pro_up = 3000, pro_down = 0, sep = c("-", "-")) {
     
     #get promoter region
     
@@ -311,7 +311,7 @@ CalculateGeneActivity <- function(mtx, fragments, species = "Hs", version = "v75
         perturb_RNA$replicate <- replicate
     }
     
-    if("perturbations" %in% colnames(perturb@meta.data)){
+    if ("perturbations" %in% colnames(perturb@meta.data)) {
         perturb_RNA$perturbations <- perturb$perturbations
     }
     return(perturb_RNA)
@@ -334,7 +334,7 @@ CalculateGeneActivity <- function(mtx, fragments, species = "Hs", version = "v75
 #' @importFrom IRanges trim
 #' @export
 
-GetPromoter <- function(species = "Hs", version = "v75", gene_type = "Symbol", protein_coding = TRUE, pro_up = 3000, pro_down = 0){
+GetPromoter <- function(species = "Hs", version = "v75", gene_type = "Symbol", protein_coding = TRUE, pro_up = 3000, pro_down = 0) {
 
     #get gene ranges from selected reference
     if (species == "Hs") {

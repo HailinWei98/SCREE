@@ -410,11 +410,11 @@ IntegratedMixscape<- function(mtx, sg_lib, NTC = "NTC", sg.to.use = "all", sg.sp
                     }
                     
                     if (plot.save == TRUE) {
-                        pdf(file.path(pdf_dir, "mixscape_KO_percent.pdf"))
+                        pdf(file.path(pdf_dir, paste(label, "mixscape_KO_percent.pdf", sep = "")))
                         print(q)
                         dev.off()
 
-                        ko_dir <- file.path(img_dir, "KO_percent")
+                        ko_dir <- file.path(img_dir, paste(label, "KO_percent", sep = ""))
                         if (!(dir.exists(ko_dir))) {
                             dir.create(ko_dir)
                         }
@@ -445,12 +445,12 @@ IntegratedMixscape<- function(mtx, sg_lib, NTC = "NTC", sg.to.use = "all", sg.sp
                     }
                     
                     if (plot.save == TRUE) {
-                        ko_dir <- file.path(img_dir, "KO_percent")
+                        ko_dir <- file.path(img_dir, paste(label, "KO_percent", sep = ""))
                         if (!(dir.exists(ko_dir))) {
                             dir.create(ko_dir)
                         }
-                        pdf(file.path(pdf_dir, "mixscape_KO_percent.pdf"))
-                        for(i in 1 : (ceiling(l/12))){
+                        pdf(file.path(pdf_dir, paste(label, "mixscape_KO_percent.pdf", sep = "")))
+                        for (i in 1 : (ceiling(l/12))) {
                             png(file.path(ko_dir, paste(i, ".png", sep = "")), 
                                 width = width, height = height, unit = "in", res = png_res)
                             print(plot_list[[i]])
@@ -500,7 +500,7 @@ IntegratedMixscape<- function(mtx, sg_lib, NTC = "NTC", sg.to.use = "all", sg.sp
             verbose = F,
             prtb.type = "KO"))
 
-        if(length(unique(eccite$mixscape_class.global)) == 3){
+        if (length(unique(eccite$mixscape_class.global)) == 3) {
 
             # Calculate percentage of KO cells for all target gene classes.
 
@@ -541,11 +541,11 @@ IntegratedMixscape<- function(mtx, sg_lib, NTC = "NTC", sg.to.use = "all", sg.sp
                 }
 
                 if (plot.save == TRUE) {
-                    pdf(file.path(pdf_dir, "mixscape_KO_percent.pdf"))
+                    pdf(file.path(pdf_dir, paste(label, "mixscape_KO_percent.pdf", sep = "")))
                     print(q)
                     dev.off()
 
-                    ko_dir <- file.path(img_dir, "KO_percent")
+                    ko_dir <- file.path(img_dir, paste(label, "KO_percent", sep = ""))
                     if (!(dir.exists(ko_dir))) {
                         dir.create(ko_dir)
                     }
@@ -557,7 +557,7 @@ IntegratedMixscape<- function(mtx, sg_lib, NTC = "NTC", sg.to.use = "all", sg.sp
 
             } else {
                 plot_list <- list()
-                for(i in 1 : (ceiling(l/12))){
+                for (i in 1 : (ceiling(l/12))) {
                     df6 <- subset(df5, gene %in% unique(df5$gene)[(i * 12 - 11) : (i * 12)])
                     p <- ggplot(df6, aes(x = guide_number, y = value * 100, fill = Var1)) +
                     geom_bar(stat = "identity") +
@@ -576,7 +576,7 @@ IntegratedMixscape<- function(mtx, sg_lib, NTC = "NTC", sg.to.use = "all", sg.sp
                 }
 
                 if (plot.save == TRUE) {
-                    pdf(file.path(pdf_dir, "mixscape_KO_percent.pdf"))
+                    pdf(file.path(pdf_dir, paste(label, "mixscape_KO_percent.pdf", sep = "")))
                     for (i in 1 : (ceiling(l/12))) {
                         png(file.path(ko_dir, paste(i, ".png", sep = "")), 
                             width =  width, height = height, unit = "in", res = png_res)
@@ -584,7 +584,7 @@ IntegratedMixscape<- function(mtx, sg_lib, NTC = "NTC", sg.to.use = "all", sg.sp
                         dev.off()
                     }
                     dev.off()
-                    ko_dir <- file.path(img_dir, "KO_percent")
+                    ko_dir <- file.path(img_dir, paste(label, "KO_percent", sep = ""))
                     if (!(dir.exists(ko_dir))) {
                         dir.create(ko_dir)
                     }

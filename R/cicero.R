@@ -122,6 +122,7 @@ ciceroPlot <- function(score, pval, selected = NULL, species = "Hs", version = "
 
         
     if (is.character(selected)) {
+        
         if (length(selected) == 1) {
                                   
             #get score and p-value of selected enhancer
@@ -824,6 +825,7 @@ ATACciceroPlot<- function(mtx, score, pval, selected =  NULL, DA_peaks = NULL, s
             if (html_config == TRUE) {
                 
                 cicero <- c()
+                cicero_base64 <- c()
                 cicero_prefix <- file.path("results/enhancer_function/cicero/img", selected)
             
             }
@@ -851,13 +853,6 @@ ATACciceroPlot<- function(mtx, score, pval, selected =  NULL, DA_peaks = NULL, s
                 peak <- paste(chr, start, end, sep = "_")
                 
                 #generate enhancer directory of html
-                
-                if (html_config == TRUE) {
-                    
-                    cicero <- c(cicero, paste(file.path(cicero_prefix, peak), ".png", sep = ""))
-                    names(cicero)[j] <- peak
-                 
-                }
 
                 gg <- gg + 
                 labs(y = "Regulatory Potential", 
@@ -882,6 +877,15 @@ ATACciceroPlot<- function(mtx, score, pval, selected =  NULL, DA_peaks = NULL, s
                     dev.off()
                 }
                 
+                if (html_config == TRUE) {
+                    
+                    cicero <- c(cicero, paste(file.path(cicero_prefix, peak), ".png", sep = ""))
+                    cicero_base64 <- c(cicero_base64, paste(file.path(prefix, cicero_prefix, peak), ".png", sep = ""))
+                    names(cicero)[j] <- peak
+                    names(cicero_base64)[j] <- peak
+                 
+                }
+                
             }
             
             #generate html config
@@ -890,6 +894,9 @@ ATACciceroPlot<- function(mtx, score, pval, selected =  NULL, DA_peaks = NULL, s
                 cicero <- paste(names(cicero), cicero, collapse = "\" , \"", sep = "\" : \"")
                 cicero <- paste("\"", selected, "\" : {\"", cicero, "\"}", sep = "")
                 cicero <- paste("\"cicero\" : {\"", cicero, "\"}", sep = "")
+                cicero_base64 <- paste(names(cicero_base64), cicero_base64, collapse = "\" , \"", sep = "\" : \"")
+                cicero_base64 <- paste("\"", selected, "\" : {\"", cicero_base64, "\"}", sep = "")
+                cicero_base64 <- paste("\"cicero\" : {\"", cicero_base64, "\"}", sep = "")
                 DA <- paste("", new_da, collapse = "", sep = "")
                 DA <- paste("\"DApeaks\" : {\"", DA, "\"}", sep = "")
             }
@@ -1025,18 +1032,7 @@ ATACciceroPlot<- function(mtx, score, pval, selected =  NULL, DA_peaks = NULL, s
                     j <- j + 1
                     
                     peak <- paste(chr, start, end, sep = "_")
-                    
-                    #generate enhancer directory of html
-                    
-                    if (html_config == TRUE) {
-                        cicero_prefix <- file.path("results/enhancer_function/cicero/img", TF)
-                        cicero <- c(cicero, paste(file.path(cicero_prefix, peak), ".png", sep = ""))
-                        cicero_base64 <- c(cicero_base64, 
-                                           knitr::image_uri(paste(file.path(prefix, cicero_prefix, peak), ".png", sep = "")))
-                        names(cicero)[j] <- peak
-                        names(cicero_base64)[j] <- peak
-                    }
-                    
+                                      
                     gg <- gg + 
                     labs(y = "Regulatory Potential", 
                          title = paste(TF, peak, sep = ":")) +
@@ -1060,6 +1056,18 @@ ATACciceroPlot<- function(mtx, score, pval, selected =  NULL, DA_peaks = NULL, s
                         print(gg)
                         dev.off()
                     }
+                    
+                    #generate enhancer directory of html
+                    
+                    if (html_config == TRUE) {
+                        cicero_prefix <- file.path("results/enhancer_function/cicero/img", TF)
+                        cicero <- c(cicero, paste(file.path(cicero_prefix, peak), ".png", sep = ""))
+                        cicero_base64 <- c(cicero_base64, 
+                                           knitr::image_uri(paste(file.path(prefix, cicero_prefix, peak), ".png", sep = "")))
+                        names(cicero)[j] <- peak
+                        names(cicero_base64)[j] <- peak
+                    }
+
                 }
                 
                 if (html_config == TRUE) {

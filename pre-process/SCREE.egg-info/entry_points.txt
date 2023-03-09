@@ -1,0 +1,2 @@
+[console_scripts]
+SCREE = SCREE:main

@@ -83,11 +83,15 @@ umap <- function(mtx, assays = "RNA", nfeature = 2000, selection.method = "vst",
     ggtitle("Perturbations") +
     ylab("UMAP 2") +
     xlab("UMAP 1") +
-    custom_theme
-    if(length(unique(perturb_QC$perturbations)) > label.cut) {
-        p1 <- p1 + scale_color_discrete(breaks = 
-                                        names(head(sort(table(perturb_QC$perturbations), decreasing = T), label.cut)))
-    }
+    custom_theme + ggsci::scale_color_d3("category20", 
+                                         breaks = names(head(sort(table(perturb_QC$perturbations)[table(perturb_QC$perturbations)!=0],
+                                                                  decreasing = T), label.cut)), 
+                                        limits = names(head(sort(table(perturb_QC$perturbations)[table(perturb_QC$perturbations)!=0],
+                                                                 decreasing = T), label.cut)), drop = FALSE, na.value = "grey")
+    # if(length(unique(perturb_QC$perturbations)) > label.cut) {
+    #     p1 <- p1 + scale_color_discrete(breaks = 
+    #                                     names(head(sort(table(perturb_QC$perturbations), decreasing = T), label.cut)))
+    # }
     
     p2 <- DimPlot(perturb_QC, 
                   reduction = paste(reduction.prefix, "umap", sep = ""), 
@@ -96,7 +100,7 @@ umap <- function(mtx, assays = "RNA", nfeature = 2000, selection.method = "vst",
     ggtitle("Seurat clusters") +
     ylab("UMAP 2") +
     xlab("UMAP 1") +
-    custom_theme
+    custom_theme + ggsci::scale_color_d3("category20")
     
     if (plot.save == TRUE) {
         
@@ -244,9 +248,10 @@ ATACumap <- function(mtx, assays = "peak", min.cutoff = "q5", reduction.key = 'L
     ggtitle("Perturbations") +
     ylab("UMAP 2") +
     xlab("UMAP 1") +
-    custom_theme
+    custom_theme + 
     if(length(unique(peak$perturbations)) > label.cut) {
-        p1 <- p1 + scale_color_discrete(breaks = names(head(sort(table(peak$perturbations), decreasing = T), label.cut)))
+        p1 <- p1 + scale_color_discrete(breaks = names(head(sort(table(perturb_QC$perturbations)[table(perturb_QC$perturbations)!=0], 
+                                                                 decreasing = T), label.cut)))
     }
     
     p2 <- DimPlot(peak, reduction = "umap", pt.size = pt.size, raster = raster) +

@@ -35,7 +35,8 @@ single_gene_matrix_regression <- function(targetobj, ngctrlgene = c("NonTargetin
         }
     }
 
-
+    YmatT = YmatT[select_genes, ]
+    
     # remove outliers
         
     Ymat_outlier = apply(YmatT, 1, function(X) {
