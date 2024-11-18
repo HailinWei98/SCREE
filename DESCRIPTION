@@ -11,8 +11,7 @@ Imports: Signac, EnsDb.Hsapiens.v75, EnsDb.Hsapiens.v79, EnsDb.Hsapiens.v86, Ens
 Depends: Signac, EnsDb.Hsapiens.v75, EnsDb.Hsapiens.v79, EnsDb.Hsapiens.v86, EnsDb.Mmusculus.v75, EnsDb.Mmusculus.v79, GenomeInfoDb, IRanges, Seurat, ggplot2, reshape2, patchwork, plyr, scales, stringr, Gviz, ensembldb, ggplotify, ggsci, ggpubr, cowplot, clusterProfiler, org.Hs.eg.db, org.Mm.eg.db, pheatmap, psych, grid, gtable, xml2, SeuratObject, ggrastr, ggrepel
 Additional_repositories: 
     https://bioconductor.org/packages/release/bioc,
-    https://bioconductor.org/packages/release/data/annotation,
-    https://mirrors.sustech.edu.cn/CRAN
+    https://bioconductor.org/packages/release/data/annotation
 License: GPL-3
 Encoding: UTF-8
 LazyData: true
