@@ -9,7 +9,9 @@ Authors@R:
 Description: SCREE(Single-cell CRISPR scREen data analyses and pErturbation modeling) is a workflow for single-cell CRISPR screens data processing and analysis. SCREE has two separate section: pre-process and analysis. The pre-process section is to perform reads alignment and quantification based on cellranger and cellranger-atac. The analysis section is an R package including functions of sgRNA assignment, sgRNA information visualization, single-cell quality control, perturbation enrichment ratio calculation, perturbation efficiency evaluation, regulatory score estimation and downstream functional analysis. All the outputs of SCREE can be integrated into an html file. 
 Imports: Signac, EnsDb.Hsapiens.v75, EnsDb.Hsapiens.v79, EnsDb.Hsapiens.v86, EnsDb.Mmusculus.v75, EnsDb.Mmusculus.v79, GenomeInfoDb, IRanges, Seurat, ggplot2, reshape2, patchwork, plyr, scales, stringr, Gviz, ensembldb, ggplotify, ggsci, ggpubr, cowplot, clusterProfiler, org.Hs.eg.db, org.Mm.eg.db, pheatmap, psych, grid, gtable, xml2, SeuratObject, ggrastr, ggrepel
 Depends: Signac, EnsDb.Hsapiens.v75, EnsDb.Hsapiens.v79, EnsDb.Hsapiens.v86, EnsDb.Mmusculus.v75, EnsDb.Mmusculus.v79, GenomeInfoDb, IRanges, Seurat, ggplot2, reshape2, patchwork, plyr, scales, stringr, Gviz, ensembldb, ggplotify, ggsci, ggpubr, cowplot, clusterProfiler, org.Hs.eg.db, org.Mm.eg.db, pheatmap, psych, grid, gtable, xml2, SeuratObject, ggrastr, ggrepel
-Additional_repositories: https://bioconductor.org/packages/release/bioc
+Additional_repositories: 
+    https://bioconductor.org/packages/release/bioc,
+    https://bioconductor.org/packages/release/data/annotation
 License: GPL-3
 Encoding: UTF-8
 LazyData: true
